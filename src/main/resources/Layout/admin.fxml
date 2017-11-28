@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="556" minWidth="716" prefHeight="556.0" prefWidth="716.0" stylesheets="@../css/admin.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nerdgeeks.shop.Controller.controllerAdmin">
+   <children>
+      <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0" styleClass="HBox" VBox.vgrow="NEVER">
+         <children>
+            <Label fx:id="lblTime" alignment="CENTER" contentDisplay="CENTER" minWidth="210.0" prefHeight="50.0" text="Time" textAlignment="CENTER" textFill="WHITE" wrapText="true" HBox.hgrow="NEVER">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" prefHeight="50.0" text="Cosmetic Shop" textAlignment="CENTER" textFill="WHITE" wrapText="true" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <MenuButton fx:id="mbtnUsrInfoBox" mnemonicParsing="false" prefHeight="36.0" prefWidth="120.0">
+               <items>
+                  <MenuItem fx:id="miPopOver" mnemonicParsing="false">
+                     <graphic>
+                        <AnchorPane prefHeight="225.0" prefWidth="190.0">
+                           <children>
+                              <Circle fx:id="circleImgUsr" fill="DODGERBLUE" layoutX="100.0" layoutY="49.0" radius="46.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Label fx:id="lblUsrNamePopOver" alignment="CENTER" layoutY="107.0" prefHeight="15.0" prefWidth="196.0" text="UserName" />
+                              <Label fx:id="lblFullName" alignment="CENTER" layoutX="2.0" layoutY="129.0" prefHeight="15.0" prefWidth="196.0" text="Full Name" />
+                              <Label fx:id="lblRoleAs" alignment="CENTER" layoutX="3.0" layoutY="148.0" prefHeight="15.0" prefWidth="196.0" text="Role" />
+                              <Hyperlink fx:id="hlEditUpdateAccount" alignment="CENTER" layoutX="3.0" layoutY="163.0" prefHeight="23.0" prefWidth="194.0" text="Edit/Update" />
+                              <Button fx:id="btnLogOut" layoutX="3.0" layoutY="184.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="196.0" text="logOut" />
+                           </children>
+                        </AnchorPane>
+                     </graphic>
+                  </MenuItem>
+               </items>
+               <graphic>
+                  <AnchorPane prefHeight="20.0" prefWidth="120.0">
+                     <children>
+                        <Circle fx:id="imgUsrTop" fill="DODGERBLUE" layoutX="26.0" layoutY="24.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Label fx:id="lblUsrName" layoutX="52.0" layoutY="17.0" text="taohid32" />
+                     </children>
+                  </AnchorPane>
+               </graphic>
+               <padding>
+                  <Insets left="-15.0" top="-10.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </MenuButton>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </HBox>
+      <SplitPane dividerPositions="0.29797979797979796" focusTraversable="true" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <items>
+          <AnchorPane maxWidth="400.0" minHeight="0.0" minWidth="0.0" prefWidth="200.0">
+               <children>
+                  <Accordion fx:id="accordion" layoutX="-42.0" layoutY="96.0" minWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                    <panes>
+                        <TitledPane fx:id="addSupplierPane" animated="false" text="Add Supplier">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXTextField fx:id="supplierName" labelFloat="true" layoutX="14.0" layoutY="18.0" promptText="Supplier Name" />
+                                    <JFXTextField fx:id="supplierContact" labelFloat="true" layoutX="14.0" layoutY="67.0" promptText="Supplier Contact No" />
+                                    <JFXTextArea fx:id="supplierAddress" labelFloat="true" layoutX="17.0" layoutY="122.0" prefHeight="32.0" prefWidth="147.0" promptText="Supplier Address" />
+                                    <JFXTextArea fx:id="supplierDes" labelFloat="true" layoutX="17.0" layoutY="194.0" prefHeight="32.0" prefWidth="147.0" promptText="Supplier Description" />
+                                    <JFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" layoutX="63.0" layoutY="278.0" onAction="#addSupplier" styleClass="floating-button" stylesheets="@../css/admin.css" text="ADD" textAlignment="CENTER" wrapText="true">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </JFXButton>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </TitledPane>
+                      <TitledPane fx:id="addProductPane" animated="false" text="Add Products">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" layoutX="69.0" layoutY="337.0" onAction="#addProduct" styleClass="floating-button" stylesheets="@../css/admin.css" text="ADD" textAlignment="CENTER" wrapText="true">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </JFXButton>
+                                    <JFXComboBox fx:id="getCategory" editable="true" labelFloat="true" layoutX="20.0" layoutY="11.0" prefHeight="24.0" prefWidth="152.0" promptText="Category" visibleRowCount="15" />
+                                    <JFXTextField fx:id="getName" labelFloat="true" layoutX="16.0" layoutY="48.0" promptText="Product Name">
+                                       <font>
+                                          <Font name="Roboto Medium" size="14.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="getQuantity" labelFloat="true" layoutX="16.0" layoutY="91.0" promptText="Quantity">
+                                       <font>
+                                          <Font name="Roboto Medium" size="14.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="getPrice" labelFloat="true" layoutX="16.0" layoutY="134.0" promptText="Selling Price (Per Item)">
+                                       <font>
+                                          <Font name="Roboto Medium" size="14.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="getVat" labelFloat="true" layoutX="16.0" layoutY="177.0" promptText="Vat %">
+                                       <font>
+                                          <Font name="Roboto Medium" size="14.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField labelFloat="true" layoutX="17.0" layoutY="220.0" promptText="Total Buy Price">
+                                       <font>
+                                          <Font name="Roboto Medium" size="14.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField labelFloat="true" layoutX="16.0" layoutY="263.0" promptText="Supplier">
+                                       <font>
+                                          <Font name="Roboto Medium" size="14.0" />
+                                       </font>
+                                    </JFXTextField>
+                                 </children></AnchorPane>
+                        </content>
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                      </TitledPane>
+                        <TitledPane fx:id="addEmployeePane" animated="false" text="Add Employee">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXTextField fx:id="getEmpEmail" labelFloat="true" layoutX="14.0" layoutY="14.0" promptText="Email">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="getEmpPass" labelFloat="true" layoutX="14.0" layoutY="61.0" prefHeight="26.0" prefWidth="161.0" promptText="Password">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" layoutX="63.0" layoutY="167.0" onAction="#addEmployee" styleClass="floating-button" stylesheets="@../css/admin.css" text="ADD" textAlignment="CENTER" wrapText="true">
+                                       <font>
+                                          <Font size="11.0" />
+                                       </font>
+                                    </JFXButton>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </TitledPane>
+                    </panes>
+                  </Accordion>
+               </children>
+            </AnchorPane>
+          <AnchorPane minWidth="200.0">
+               <children>
+                  <VBox fx:id="dataPane" prefHeight="504.0" prefWidth="508.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <TableView fx:id="adminPanelTable" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</VBox>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="purchaseProductPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="760.0" stylesheets="@../../css/admin.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nerdgeeks.shop.Controller.Purchase.PurchaseController">
+   <children>
+         <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="740.0" styleClass="floating-button" VBox.vgrow="ALWAYS">
+         <children>
+            <Label styleClass="hbox-title" text="Purchase Products" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </Label>
+            <HBox alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <JFXComboBox fx:id="selectMonthField" prefHeight="25.0" prefWidth="134.0" promptText="Select Month" unFocusColor="WHITE" visibleRowCount="15" HBox.hgrow="ALWAYS" />
+                  <JFXComboBox fx:id="selectDateField" prefHeight="25.0" prefWidth="81.0" promptText="Select Date" unFocusColor="WHITE" visibleRowCount="15" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </JFXComboBox>
+                  <JFXButton onAction="#resetSelectedDate" styleClass="menu-buttons-selected" text="Reset" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+               </children>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+         </HBox>
+         <TableView fx:id="purchaseProductTable" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+            <VBox.margin>
+               <Insets left="10.0" right="10.0" />
+            </VBox.margin>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+         </TableView>
+         <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="740.0" spacing="10.0">
+            <children>
+            <JFXButton fx:id="addButton" onAction="#addButtonAction" prefHeight="30.0" prefWidth="60.0" styleClass="menu-buttons-selected" text="Add" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></JFXButton>
+            <JFXButton fx:id="editButton" onAction="#editButtonAction" prefHeight="30.0" prefWidth="60.0" styleClass="menu-buttons-selected" text="Edit" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></JFXButton>
+            <JFXButton fx:id="deleteButton" minHeight="-Infinity" minWidth="-Infinity" onAction="#deleteButtonAction" prefHeight="30.0" styleClass="menu-buttons-selected" text="Delete" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></JFXButton>
+            </children>
+            <VBox.margin>
+               <Insets left="10.0" right="10.0" />
+            </VBox.margin>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+         </HBox>
+      </children>
+   </VBox>

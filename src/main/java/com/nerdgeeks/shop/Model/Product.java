@@ -2,21 +2,27 @@ package com.nerdgeeks.shop.Model;
 
 public class Product {
 
-    private String productName, productCategory, productPrice, productQuantity, productVat;
+    private String productId, productName, buyingPrice, sellingPrice, productVat, productCategory, productSupplier;
 
-    //For Table Column Name
-    private static String[] colName = {"productName","productCategory", "productPrice","productQuantity", "productVat"};
-
-    public Product(){
-
+    public Product() {
     }
 
-    public Product(String productName, String productCategory, String productPrice, String productQuantity, String productVat) {
+    public Product(String productId, String productName, String buyingPrice, String sellingPrice, String productVat, String productCategory, String productSupplier) {
+        this.productId = productId;
         this.productName = productName;
-        this.productCategory = productCategory;
-        this.productPrice = productPrice;
-        this.productQuantity = productQuantity;
+        this.buyingPrice = buyingPrice;
+        this.sellingPrice = sellingPrice;
         this.productVat = productVat;
+        this.productCategory = productCategory;
+        this.productSupplier = productSupplier;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getProductName() {
@@ -27,28 +33,20 @@ public class Product {
         this.productName = productName;
     }
 
-    public String getProductCategory() {
-        return productCategory;
+    public String getBuyingPrice() {
+        return buyingPrice;
     }
 
-    public void setProductCategory(String productCategory) {
-        this.productCategory = productCategory;
+    public void setBuyingPrice(String buyingPrice) {
+        this.buyingPrice = buyingPrice;
     }
 
-    public String getProductPrice() {
-        return productPrice;
+    public String getSellingPrice() {
+        return sellingPrice;
     }
 
-    public void setProductPrice(String productPrice) {
-        this.productPrice = productPrice;
-    }
-
-    public String getProductQuantity() {
-        return productQuantity;
-    }
-
-    public void setProductQuantity(String productQuantity) {
-        this.productQuantity = productQuantity;
+    public void setSellingPrice(String sellingPrice) {
+        this.sellingPrice = sellingPrice;
     }
 
     public String getProductVat() {
@@ -59,7 +57,19 @@ public class Product {
         this.productVat = productVat;
     }
 
-    public static String[] getColName(){
-        return colName;
+    public String getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(String productCategory) {
+        this.productCategory = productCategory;
+    }
+
+    public String getProductSupplier() {
+        return productSupplier;
+    }
+
+    public void setProductSupplier(String productSupplier) {
+        this.productSupplier = productSupplier;
     }
 }

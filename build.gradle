@@ -1,45 +1,34 @@
-group 'Shop'
+group 'Shop-Beta'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    dependencies {
-        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
-    }
     repositories {
         mavenLocal()
         mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
     }
 }
+
 apply plugin: 'java'
+apply plugin: 'javafx-gradle-plugin'
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenLocal()
     mavenCentral()
+    jcenter()
 }
 
 dependencies{
     compile fileTree(dir: 'lib' , include: '*.jar')
 }
 
-apply plugin: 'javafx-gradle-plugin'
-
-//jfx {
-//    verbose = true
-//    mainClass = 'com.nerdgeeks.shop.MainApp'
-//    appName = 'Super Shop'
-//    additionalAppResources = 'src/main/resources'
-//    manifestAttributes = [
-//            someElement: "hello world"
-//    ]
-//    vendor = "NerdGeeks"
-//    bundleArguments = [
-//            runtime: null
-//    ]
-//}
-
-fatJar(type: Jar) {
+task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'Super Shop',
                 'Implementation-Version': '1.0',

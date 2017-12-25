@@ -4,9 +4,6 @@ public class Supplier {
 
     private String supplierId, supplierName, supplierNo, supplierAddress, supplierDescription;
 
-    //For Table Column Name
-    private static String[] SupplierColName = {"supplierName","supplierNo", "supplierAddress","supplierDescription"};
-
     public Supplier(){
 
     }
@@ -59,7 +56,4 @@ public class Supplier {
         this.supplierDescription = supplierDescription;
     }
 
-    public static String[] getSupplierColName(){
-        return SupplierColName;
-    }
 }

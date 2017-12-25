@@ -31,6 +31,7 @@ public class PurchaseController implements Initializable {
     public VBox purchaseProductPane;
     public JFXComboBox selectMonthField;
     public JFXComboBox selectDateField;
+    public JFXButton resetButton;
 
     private ObservableList<Purchase> purchaseData = FXCollections.observableArrayList();
     private ObservableList<ObservableList<PurchaseProduct>> purchaseProductsData = FXCollections.observableArrayList();
@@ -46,6 +47,8 @@ public class PurchaseController implements Initializable {
         setTableColumnDataForPurchase(null, null);
         setComboBoxData();
 
+        resetButton.setDisable(true);
+
         editButton.disableProperty().bind(Bindings.isEmpty(purchaseProductTable.getSelectionModel().getSelectedItems()));
         deleteButton.disableProperty().bind(Bindings.isEmpty(purchaseProductTable.getSelectionModel().getSelectedItems()));
 
@@ -58,8 +61,12 @@ public class PurchaseController implements Initializable {
         });
 
         selectDateField.valueProperty().addListener((observable, oldValue, newValue) -> {
+
             if(newValue != null){
                 setTableColumnDataForPurchase(null, newValue.toString());
+                resetButton.setDisable(false);
+            } else {
+                resetButton.setDisable(true);
             }
         });
 
@@ -76,9 +83,11 @@ public class PurchaseController implements Initializable {
         DatabaseUtil.getDataValueEvent(AppConstant.INVOICES_DATABASE_NODE_NAME, new OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
+
                 if(purchaseData.size()>0){
                     purchaseData.clear();
                 }
+
                 if (date != null){  // Get all purchase record value from database only selected date
                     for (DataSnapshot snapshot : dataSnapshot.child(currentMonth).child(date).child(AppConstant.PURCHASE_DATABASE_NODE_NAME).getChildren()){
                         for (DataSnapshot dataSnapshot1: snapshot.getChildren()){
@@ -201,8 +210,7 @@ public class PurchaseController implements Initializable {
         final JFXButton addButton = new JFXButton("More Details");
 
         final StackPane paddedButton = new StackPane();
-        // records the y pos of the last button press so that the add person dialog can be shown next to the cell.
-        final DoubleProperty buttonY = new SimpleDoubleProperty();
+
         private String theme2Url = ClassLoader.getSystemResource("css/admin.css").toExternalForm();
 
         AddProductShowButton(final TableView table) {
@@ -210,7 +218,6 @@ public class PurchaseController implements Initializable {
             paddedButton.getChildren().add(addButton);
             paddedButton.getStylesheets().add(theme2Url);
             addButton.getStyleClass().add("menu-buttons-selected");
-            addButton.setOnMousePressed(mouseEvent -> buttonY.set(mouseEvent.getScreenY()));
             addButton.setOnAction(event -> {
                 table.getSelectionModel().select(getTableRow().getIndex());
                 int i = table.getSelectionModel().getSelectedIndex();

@@ -13,7 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -21,8 +20,7 @@ import java.util.Date;
 
 public class JFXUtil {
 
-
-    static double xOffset = 0, yOffset = 0;
+    private static double xOffset = 0, yOffset = 0;
 
     //set the table column name and initialize the table column with the database column
     public static void setTableData(TableView table, String[] colName, String columnFor, ObservableList tableData){
@@ -36,7 +34,7 @@ public class JFXUtil {
             column.setCellValueFactory(new PropertyValueFactory(aColName)); //indicate the table column to model column
             table.getColumns().add(column);
         }
-        table.setItems(tableData);            //Set All data to table
+        table.setItems(tableData); //Set All data to table
     }
 
     // show the popup windows

@@ -73,7 +73,7 @@ public class LoginController implements Initializable{
 
     @FXML
     private void showEmpPanel(ActionEvent actionEvent) {
-       windows("layout/EmployeeHome.fxml","Emplloyee Panel",actionEvent);
+
     }
 
     @FXML

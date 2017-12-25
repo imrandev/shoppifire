@@ -4,11 +4,13 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.nerdgeeks.shop.Model.DynamicField;
+import com.nerdgeeks.shop.Model.Product;
 import com.nerdgeeks.shop.Model.Purchase;
 import com.nerdgeeks.shop.Model.PurchaseProduct;
 import com.nerdgeeks.shop.Util.AppConstant;
 import com.nerdgeeks.shop.Util.DatabaseUtil;
 import com.nerdgeeks.shop.Util.JFXUtil;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -43,29 +45,56 @@ public class PurchaseProductController implements Initializable{
     private int  row = 2;
     private int col = 0;
     private int rowHeight = 50;
+    private int[] finalPrice;
 
     private ObservableList supplierProductName = FXCollections.observableArrayList();
     private ObservableList supplierProductId = FXCollections.observableArrayList();
+    private ObservableList supplierProductBuyingPrice = FXCollections.observableArrayList();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         productSupplierField.setItems(DatabaseUtil.getSupplierName());
+        totalByuingPriceField.setText("0");
 
         scrollPane.vvalueProperty().bind(gridPane.heightProperty());
 
         dynamicFields.add(new DynamicField(productNameField,quantityField));
 
         productSupplierField.valueProperty().addListener((observable, oldValue, newValue) -> {
+
             supplierProductName = DatabaseUtil.getProductNameForSupplier(newValue.toString());
             supplierProductId = DatabaseUtil.getProductIdForSupplier(newValue.toString());
+            supplierProductBuyingPrice = DatabaseUtil.getProductBuyingPriceForSupplier(newValue.toString());
+
             setProductNameForAllCombobox();
         });
+
     }
 
     private void setProductNameForAllCombobox(){
         for (DynamicField dynamicField: dynamicFields) {
             dynamicField.getJfxComboBox().setItems(supplierProductName);
+
+            dynamicField.getJfxTextField().textProperty().addListener((observable, oldValue, newValue) -> {
+
+                int quantity;
+                int totalPrice = Integer.parseInt(totalByuingPriceField.getText());
+                if(newValue.equals("")){
+                    if(dynamicFields.size()>1){
+                        totalPrice = totalPrice-finalPrice[dynamicFields.size()];
+                    } else {
+                        totalPrice = 0;
+                    }
+                } else {
+                    quantity = Integer.parseInt(newValue);
+                    String productPrice = supplierProductBuyingPrice.get(dynamicField.getJfxComboBox().getSelectionModel().getSelectedIndex()).toString();
+                    totalPrice = totalPrice + (Integer.parseInt(productPrice) * quantity);
+                }
+                totalByuingPriceField.setText(String.valueOf(totalPrice));
+                finalPrice[dynamicFields.size()-1] = totalPrice;
+            });
         }
     }
 
@@ -123,12 +152,12 @@ public class PurchaseProductController implements Initializable{
     @FXML
     public void resetButtonAction(ActionEvent actionEvent) {
 
-        totalByuingPriceField.clear();
+        totalByuingPriceField.setText("0");
         paidField.clear();
 
         for (DynamicField dynamicField: dynamicFields) {
             dynamicField.getJfxComboBox().getSelectionModel().clearSelection();
-            dynamicField.getJfxTextField().clear();
+            dynamicField.getJfxTextField().setText("");
         }
     }
 

@@ -26,7 +26,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </JFXComboBox>
-                  <JFXButton onAction="#resetSelectedDate" styleClass="menu-buttons-selected" text="Reset" HBox.hgrow="ALWAYS">
+                  <JFXButton fx:id="resetButton" onAction="#resetSelectedDate" styleClass="menu-buttons-selected" text="Reset" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>

@@ -28,7 +28,6 @@ public class UpdateProductController implements Initializable{
     public JFXTextField sellingPriceField;
     public JFXTextField productVatField;
     public JFXComboBox productCategoryField;
-    public JFXComboBox productSupplierField;
 
     static ObservableList<String> category = FXCollections.observableArrayList();
     static Product updateProduct;
@@ -37,10 +36,8 @@ public class UpdateProductController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
 
         productCategoryField.setItems(category);
-        productSupplierField.setItems(DatabaseUtil.getSupplierName());
 
         productCategoryField.getSelectionModel().select(updateProduct.getProductCategory());
-        productSupplierField.getSelectionModel().select(updateProduct.getProductSupplier());
         productNameField.setText(updateProduct.getProductName());
         productIdField.setText(updateProduct.getProductId());
         buyingPriceField.setText(updateProduct.getBuyingPrice());
@@ -48,12 +45,7 @@ public class UpdateProductController implements Initializable{
         productVatField.setText(updateProduct.getProductVat());
     }
 
-
     @FXML
-    public void closeAction(ActionEvent event) {
-        ((Node) (event.getSource())).getScene().getWindow().hide();
-    }
-
     public void updateButtonAction(ActionEvent actionEvent) {
 
         if (validateInput()) {
@@ -64,7 +56,7 @@ public class UpdateProductController implements Initializable{
             String selling_Price = sellingPriceField.getText();
             String product_Vat = productVatField.getText();
             String product_Category = productCategoryField.getSelectionModel().getSelectedItem().toString();
-            String product_Supplier = productSupplierField.getSelectionModel().getSelectedItem().toString();
+            String product_Supplier = updateProduct.getProductSupplier();
 
             Product product = new Product(product_Id,product_Name, buying_Price,selling_Price,
                     product_Vat,product_Category,product_Supplier);
@@ -85,6 +77,7 @@ public class UpdateProductController implements Initializable{
         }
     }
 
+    @FXML
     public void resetButtonAction(ActionEvent actionEvent) {
         productNameField.clear();
         productIdField.clear();
@@ -92,7 +85,6 @@ public class UpdateProductController implements Initializable{
         sellingPriceField.clear();
         productVatField.clear();
         productCategoryField.getSelectionModel().clearSelection();
-        productSupplierField.getSelectionModel().clearSelection();
     }
 
     private boolean validateInput() {
@@ -117,9 +109,6 @@ public class UpdateProductController implements Initializable{
         if (productCategoryField.getSelectionModel().isEmpty()) {
             errorMessage += "Category Required!!\n";
         }
-        if (productSupplierField.getSelectionModel().isEmpty()) {
-            errorMessage += "Supplier Required!!\n";
-        }
 
         if (errorMessage.length() == 0) {
             return true;
@@ -128,6 +117,11 @@ public class UpdateProductController implements Initializable{
             JFXUtil.showAlertBox(errorMessage);
             return false;
         }
+    }
+
+    @FXML
+    public void closeAction(ActionEvent event) {
+        ((Node) (event.getSource())).getScene().getWindow().hide();
     }
 
 }

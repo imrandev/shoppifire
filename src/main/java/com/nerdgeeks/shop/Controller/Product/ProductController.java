@@ -107,7 +107,7 @@ public class ProductController implements Initializable {
                 //set the column name and initialize column with database column
                 String[] productsColName = AppConstant.PRODUCTS_TABLE_COLUMN_NAME;
 
-                JFXUtil.setTableData(productTable,productsColName,"product", productData);
+                JFXUtil.setTableData(productTable,productsColName, productData);
 
             }
             @Override

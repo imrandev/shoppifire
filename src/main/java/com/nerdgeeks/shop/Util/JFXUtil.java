@@ -23,14 +23,33 @@ public class JFXUtil {
     private static double xOffset = 0, yOffset = 0;
 
     //set the table column name and initialize the table column with the database column
-    public static void setTableData(TableView table, String[] colName, String columnFor, ObservableList tableData){
+    public static void setTableData(TableView table, String[] colName, ObservableList tableData){
 
         table.getColumns().clear();
 
+        String capitalizeColumnNameFirstLatter;
+        String name;
+        TableColumn column;
+        String buying = "buying", selling = "selling", supplier= "supplier", product = "product";
+
         //Initialize the table Column and column value
         for(String aColName : colName) {
-            String name = aColName.replace(columnFor, "");
-            TableColumn column = new TableColumn(name);
+
+            if(aColName.contains(buying)){
+                capitalizeColumnNameFirstLatter = buying.substring(0, 1).toUpperCase() + buying.substring(1);
+                name = aColName.replace(buying, capitalizeColumnNameFirstLatter + " ");
+            } else if(aColName.contains(selling)){
+                capitalizeColumnNameFirstLatter = selling.substring(0, 1).toUpperCase() + selling.substring(1);
+                name = aColName.replace(selling, capitalizeColumnNameFirstLatter + " ");
+            } else if (aColName.contains(supplier)){
+                capitalizeColumnNameFirstLatter = supplier.substring(0, 1).toUpperCase() + supplier.substring(1);
+                name = aColName.replace(supplier, capitalizeColumnNameFirstLatter + " ");
+            } else{
+                capitalizeColumnNameFirstLatter = product.substring(0, 1).toUpperCase() + product.substring(1);
+                name = aColName.replace(product, capitalizeColumnNameFirstLatter + " ");
+            }
+
+            column = new TableColumn(name);
             column.setCellValueFactory(new PropertyValueFactory(aColName)); //indicate the table column to model column
             table.getColumns().add(column);
         }
@@ -78,8 +97,11 @@ public class JFXUtil {
     }
 
     public static String getCurrentDate(){
-        String timeStamp = new SimpleDateFormat("dd").format(new Date());
-        return timeStamp;
+        String currentDate = new SimpleDateFormat("dd").format(new Date());
+        if(currentDate.substring(0,1).contains("0")){
+            currentDate = currentDate.substring(1) ;
+        }
+        return currentDate;
     }
 
 }

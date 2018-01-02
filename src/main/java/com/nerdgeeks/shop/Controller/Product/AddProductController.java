@@ -8,6 +8,8 @@ import com.nerdgeeks.shop.Util.AppConstant;
 import com.nerdgeeks.shop.Util.AutoCompleteComboBoxListener;
 import com.nerdgeeks.shop.Util.DatabaseUtil;
 import com.nerdgeeks.shop.Util.JFXUtil;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -40,6 +42,20 @@ public class AddProductController implements Initializable{
         productSupplierField.setItems(DatabaseUtil.getSupplierName());
 
         new AutoCompleteComboBoxListener<>(productCategoryField);
+
+        buyingPriceField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[0-9]+") && !newValue.isEmpty()) {
+                JFXUtil.showAlertBox("Please input only Number Value");
+                buyingPriceField.setText("");
+            }
+        });
+
+        sellingPriceField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[0-9]+") && !newValue.isEmpty()) {
+                JFXUtil.showAlertBox("Please input only Number Value");
+                sellingPriceField.setText("");
+            }
+        });
     }
 
 
@@ -109,7 +125,7 @@ public class AddProductController implements Initializable{
         if (productVatField.getText().isEmpty()) {
             errorMessage += "Vat Required!!\n";
         }
-        if (productCategoryField.getSelectionModel().getSelectedItem().toString().isEmpty()) {
+        if (productCategoryField.getSelectionModel().isEmpty()) {
             errorMessage += "Category Required!!\n";
         }
         if (productSupplierField.getSelectionModel().isEmpty()) {

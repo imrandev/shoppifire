@@ -127,7 +127,7 @@ public class DatabaseUtil {
 
         ObservableList productName = FXCollections.observableArrayList();
 
-        firebaseDatabase.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME).child(SupplierName).addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseDatabase.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME).child(SupplierName).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot rootCategory: dataSnapshot.getChildren()){

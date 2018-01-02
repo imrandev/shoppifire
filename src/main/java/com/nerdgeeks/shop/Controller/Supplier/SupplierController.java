@@ -82,7 +82,7 @@ public class SupplierController implements Initializable {
                 //set the column name and initialize column with database column
                 String[] SupplierColName = AppConstant.SUPPLIERS_TABLE_COLUMN_NAME;
 
-                JFXUtil.setTableData(supplierTable,SupplierColName,"supplier", supplierData);
+                JFXUtil.setTableData(supplierTable,SupplierColName, supplierData);
             }
 
             @Override

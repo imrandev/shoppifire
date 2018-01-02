@@ -15,6 +15,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.itextpdf:itextpdf:5.5.12" level="project" />
     <orderEntry type="module-library" scope="PROVIDED">
       <library name="Gradle: api-common-1.1.0">
         <CLASSES>
@@ -564,6 +565,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.itextpdf:itextpdf:5.5.12" level="project" />
     <orderEntry type="module-library" scope="RUNTIME">
       <library name="Gradle: api-common-1.1.0">
         <CLASSES>
@@ -1113,6 +1115,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" scope="TEST" name="Gradle: com.itextpdf:itextpdf:5.5.12" level="project" />
     <orderEntry type="module-library" scope="TEST">
       <library name="Gradle: api-common-1.1.0">
         <CLASSES>

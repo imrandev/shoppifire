@@ -5,31 +5,32 @@ import javafx.collections.ObservableList;
 
 public class Purchase {
 
-    private String purchaseId, supplierName, totalBuyingPrice, totalPaid, purchaseMonth, purchaseDate;
+    private String purchaseId, supplierName, totalBuyingPrice, totalPaid, purchaseMonth, purchaseDate, purchaseConfirm;
 
     ObservableList<PurchaseProduct> purchaseProducts = FXCollections.observableArrayList();
 
     public Purchase() {
     }
 
-    public Purchase(String purchaseId, String supplierName, String totalBuyingPrice, String totalPaid, String purchaseMonth, String purchaseDate) {
+    public Purchase(String purchaseId, String supplierName, String totalBuyingPrice, String totalPaid, String purchaseMonth, String purchaseDate, String purchaseConfirm) {
         this.purchaseId = purchaseId;
         this.supplierName = supplierName;
         this.totalBuyingPrice = totalBuyingPrice;
         this.totalPaid = totalPaid;
         this.purchaseMonth = purchaseMonth;
         this.purchaseDate = purchaseDate;
+        this.purchaseConfirm = purchaseConfirm;
     }
 
-    public Purchase(String purchaseId, String supplierName, String totalBuyingPrice, String totalPaid, String purchaseMonth, String purchaseDate, ObservableList<PurchaseProduct> purchaseProducts) {
+    public Purchase(String purchaseId, String supplierName, String totalBuyingPrice, String totalPaid, String purchaseMonth, String purchaseDate, String purchaseConfirm, ObservableList<PurchaseProduct> purchaseProducts) {
         this.purchaseId = purchaseId;
         this.supplierName = supplierName;
         this.totalBuyingPrice = totalBuyingPrice;
         this.totalPaid = totalPaid;
         this.purchaseMonth = purchaseMonth;
         this.purchaseProducts = purchaseProducts;
-
         this.purchaseDate = purchaseDate;
+        this.purchaseConfirm = purchaseConfirm;
     }
 
     public String getPurchaseId() {
@@ -38,6 +39,14 @@ public class Purchase {
 
     public void setPurchaseId(String purchaseId) {
         this.purchaseId = purchaseId;
+    }
+
+    public String getPurchaseConfirm() {
+        return purchaseConfirm;
+    }
+
+    public void setPurchaseConfirm(String purchaseConfirm) {
+        this.purchaseConfirm = purchaseConfirm;
     }
 
     public String getSupplierName() {

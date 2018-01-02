@@ -2,17 +2,15 @@ package com.nerdgeeks.shop.Controller.Purchase;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.nerdgeeks.shop.Model.Purchase;
-import com.nerdgeeks.shop.Model.PurchaseProduct;
 import com.nerdgeeks.shop.Util.AppConstant;
 import com.nerdgeeks.shop.Util.DatabaseUtil;
 import com.nerdgeeks.shop.Util.JFXUtil;
 import com.nerdgeeks.shop.Util.OnGetDataListener;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,7 +32,7 @@ public class PurchaseController implements Initializable {
     public JFXButton resetButton;
 
     private ObservableList<Purchase> purchaseData = FXCollections.observableArrayList();
-    private ObservableList<ObservableList<PurchaseProduct>> purchaseProductsData = FXCollections.observableArrayList();
+    private ObservableList<DatabaseReference> purchaseProductsDatabaseRef = FXCollections.observableArrayList();
 
     private ObservableList<String> selectMonth = FXCollections.observableArrayList();
     private ObservableList<String> selectDate = FXCollections.observableArrayList();
@@ -44,7 +42,6 @@ public class PurchaseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        setTableColumnDataForPurchase(null, null);
         setComboBoxData();
 
         resetButton.setDisable(true);
@@ -56,28 +53,22 @@ public class PurchaseController implements Initializable {
 
         selectMonthField.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != null) {
-                setTableColumnDataForPurchase(newValue.toString(),null);
+                currentMonth = newValue.toString();
+                setTableColumnDataForPurchase(null);
             }
         });
 
         selectDateField.valueProperty().addListener((observable, oldValue, newValue) -> {
-
             if(newValue != null){
-                setTableColumnDataForPurchase(null, newValue.toString());
                 resetButton.setDisable(false);
+                setTableColumnDataForPurchase(newValue.toString());
             } else {
                 resetButton.setDisable(true);
             }
         });
-
-        selectDateField.setItems(selectDate);
     }
 
-    private void setTableColumnDataForPurchase(String month, String date){
-
-      if (month != null){
-          currentMonth = month;
-      }
+    private void setTableColumnDataForPurchase(String date){
 
         //Firebase Databse get data and set data to table
         DatabaseUtil.getDataValueEvent(AppConstant.INVOICES_DATABASE_NODE_NAME, new OnGetDataListener() {
@@ -88,39 +79,28 @@ public class PurchaseController implements Initializable {
                     purchaseData.clear();
                 }
 
-                if (date != null){  // Get all purchase record value from database only selected date
+                if (purchaseProductsDatabaseRef.size()>0){
+                    purchaseProductsDatabaseRef.clear();
+                }
+
+                if (date!=null){
                     for (DataSnapshot snapshot : dataSnapshot.child(currentMonth).child(date).child(AppConstant.PURCHASE_DATABASE_NODE_NAME).getChildren()){
-                        for (DataSnapshot dataSnapshot1: snapshot.getChildren()){
-                            Purchase purchase = dataSnapshot1.getValue(Purchase.class);
-                            purchaseData.add(purchase);
-                        }
+                        getPurchaseRecord(snapshot);
                     }
-                } else {  // Get all purchase record value from database
-
+                } else {
                     selectDate.clear();
-
                     for (DataSnapshot snapshot : dataSnapshot.child(currentMonth).getChildren()){
-
                         selectDate.add(snapshot.getKey()); // get current month purchase record date
-
                         for (DataSnapshot snapshot1: snapshot.child(AppConstant.PURCHASE_DATABASE_NODE_NAME).getChildren()){
-                            for (DataSnapshot dataSnapshot1: snapshot1.getChildren()){
-                                Purchase purchase = dataSnapshot1.getValue(Purchase.class);
-                                purchaseData.add(purchase);
-                                ObservableList<PurchaseProduct> oneSupplier = FXCollections.observableArrayList();
-                                for (DataSnapshot rootProduct: dataSnapshot1.child("Products").getChildren()){
-                                    PurchaseProduct product = rootProduct.getValue(PurchaseProduct.class);
-                                    oneSupplier.add(product);
-                                }
-                                purchaseProductsData.add(oneSupplier);
-                            }
+                            getPurchaseRecord(snapshot1);
                         }
                     }
+                    selectDateField.setItems(selectDate);
                 }
 
                 //set the column name and initialize column with database column
                 String[] PurchaseColName = AppConstant.PURCHASE_TABLE_COLUMN_NAME;
-                setTableData(purchaseProductTable,PurchaseColName,"purchase", purchaseData);
+                setTableData(purchaseProductTable,PurchaseColName,purchaseData);
             }
 
             @Override
@@ -130,11 +110,24 @@ public class PurchaseController implements Initializable {
         });
     }
 
+
+    private void getPurchaseRecord(DataSnapshot snapshot){
+
+        for (DataSnapshot dataSnapshot1: snapshot.getChildren()){
+            Purchase purchase = dataSnapshot1.getValue(Purchase.class);
+            purchaseData.add(purchase);
+
+            purchaseProductsDatabaseRef.add(dataSnapshot1.getRef()); //save all database reference for further uses
+        }
+    }
+
+
     //set the table column name and initialize the table column with the database column
-    public void setTableData(TableView table, String[] colName, String columnFor, ObservableList tableData){
+    public void setTableData(TableView table, String[] colName, ObservableList tableData){
 
         table.getColumns().clear();
 
+        String columnFor  = AppConstant.PURCHASE_DATABASE_NODE_NAME;
         //Initialize the table Column and column value
         for(String aColName : colName) {
             String name = aColName.replace(columnFor, "");
@@ -152,18 +145,23 @@ public class PurchaseController implements Initializable {
     }
 
     private void setComboBoxData(){
-        DatabaseUtil.getDataValueEvent(AppConstant.INVOICES_DATABASE_NODE_NAME, new OnGetDataListener() {
+
+        DatabaseUtil.getDataForSingleValueEvent(AppConstant.INVOICES_DATABASE_NODE_NAME, new OnGetDataListener() {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
 
                 if(selectMonth.size()>0) {
                     selectMonth.clear();
                 }
+
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()){ // Get all month from database and show them in combobox
                     selectMonth.add(snapshot.getKey());
                 }
                 selectMonthField.setItems(selectMonth);
-                selectMonthField.getSelectionModel().select(currentMonth);
+
+                if(!selectMonth.isEmpty()) {
+                    selectMonthField.getSelectionModel().select(currentMonth);
+                }
             }
 
             @Override
@@ -171,6 +169,12 @@ public class PurchaseController implements Initializable {
 
             }
         });
+
+    }
+
+    public void resetSelectedDate(ActionEvent actionEvent) {
+        selectDateField.getSelectionModel().clearSelection();
+        setTableColumnDataForPurchase(null);
     }
 
     public void addButtonAction(ActionEvent actionEvent) {
@@ -199,15 +203,9 @@ public class PurchaseController implements Initializable {
 //        supplyProductTable.getSelectionModel().clearSelection();
     }
 
-    public void resetSelectedDate(ActionEvent actionEvent) {
-        selectDateField.getSelectionModel().clearSelection();
-        setTableColumnDataForPurchase(null,null);
-    }
-
-
     private class AddProductShowButton extends TableCell<Purchase, Boolean> {
 
-        final JFXButton addButton = new JFXButton("More Details");
+        final JFXButton moreDetails = new JFXButton("More Details");
 
         final StackPane paddedButton = new StackPane();
 
@@ -215,13 +213,15 @@ public class PurchaseController implements Initializable {
 
         AddProductShowButton(final TableView table) {
             paddedButton.setPadding(new Insets(3));
-            paddedButton.getChildren().add(addButton);
+            paddedButton.getChildren().add(moreDetails);
             paddedButton.getStylesheets().add(theme2Url);
-            addButton.getStyleClass().add("menu-buttons-selected");
-            addButton.setOnAction(event -> {
+            moreDetails.getStyleClass().add("menu-buttons-selected");
+
+            // More-Details button click listener
+            moreDetails.setOnAction(event -> {
                 table.getSelectionModel().select(getTableRow().getIndex());
                 int i = table.getSelectionModel().getSelectedIndex();
-                ViewPurchasedProductController.purchaseProductsData = purchaseProductsData.get(i);
+                ViewPurchasedProductController.purchaseProductDatabaseRef = purchaseProductsDatabaseRef.get(i);
                 JFXUtil.popUpWindows("layout/Purchase/ViewPurchaseProduct.fxml", event);
             });
         }

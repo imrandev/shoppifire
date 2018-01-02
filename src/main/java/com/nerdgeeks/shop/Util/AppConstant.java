@@ -12,6 +12,8 @@ public class AppConstant {
 
     public static final String SELL_DATABASE_NODE_NAME = "Sell";
 
+    public static final String STOCK_DATABASE_NODE_NAME = "Stock";
+
     //For Products Table View Column Name
     public static final String[] PRODUCTS_TABLE_COLUMN_NAME = {"productName", "buyingPrice",
             "sellingPrice", "productVat","productCategory","productSupplier"};

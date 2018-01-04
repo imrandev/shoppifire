@@ -26,7 +26,7 @@ public  class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception{
 
-//        //Initialize the firebase database with the default app
+        //Initialize the firebase database with the default app
         DatabaseUtil fireDatabase = new DatabaseUtil();
         fireDatabase.ConnectFirebase();
 

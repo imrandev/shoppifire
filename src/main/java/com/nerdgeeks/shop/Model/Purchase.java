@@ -5,32 +5,30 @@ import javafx.collections.ObservableList;
 
 public class Purchase {
 
-    private String purchaseId, supplierName, totalBuyingPrice, totalPaid, purchaseMonth, purchaseDate, purchaseConfirm;
+    private String purchaseId, supplierName, totalBuyingPrice, totalPaid, totalDue, purchaseMonth, purchaseDate, purchaseConfirm;
 
     ObservableList<PurchaseProduct> purchaseProducts = FXCollections.observableArrayList();
 
     public Purchase() {
     }
 
-    public Purchase(String purchaseId, String supplierName, String totalBuyingPrice, String totalPaid, String purchaseMonth, String purchaseDate, String purchaseConfirm) {
+    public Purchase(String purchaseId, String supplierName, String totalBuyingPrice, String totalPaid, String totalDue, String purchaseMonth, String purchaseDate, String purchaseConfirm) {
         this.purchaseId = purchaseId;
         this.supplierName = supplierName;
         this.totalBuyingPrice = totalBuyingPrice;
         this.totalPaid = totalPaid;
+        this.totalDue = totalDue;
         this.purchaseMonth = purchaseMonth;
         this.purchaseDate = purchaseDate;
         this.purchaseConfirm = purchaseConfirm;
     }
 
-    public Purchase(String purchaseId, String supplierName, String totalBuyingPrice, String totalPaid, String purchaseMonth, String purchaseDate, String purchaseConfirm, ObservableList<PurchaseProduct> purchaseProducts) {
-        this.purchaseId = purchaseId;
-        this.supplierName = supplierName;
-        this.totalBuyingPrice = totalBuyingPrice;
-        this.totalPaid = totalPaid;
-        this.purchaseMonth = purchaseMonth;
-        this.purchaseProducts = purchaseProducts;
-        this.purchaseDate = purchaseDate;
-        this.purchaseConfirm = purchaseConfirm;
+    public String getTotalDue() {
+        return totalDue;
+    }
+
+    public void setTotalDue(String totalDue) {
+        this.totalDue = totalDue;
     }
 
     public String getPurchaseId() {

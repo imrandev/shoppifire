@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 public class PurchaseController implements Initializable {
 
     public TableView<Purchase> purchaseProductTable;
-    public JFXButton addButton, editButton, deleteButton;
+    public JFXButton addButton, deleteButton;
     public VBox purchaseProductPane;
     public JFXComboBox selectMonthField;
     public JFXComboBox selectDateField;
@@ -46,7 +46,6 @@ public class PurchaseController implements Initializable {
 
         resetButton.setDisable(true);
 
-        editButton.disableProperty().bind(Bindings.isEmpty(purchaseProductTable.getSelectionModel().getSelectedItems()));
         deleteButton.disableProperty().bind(Bindings.isEmpty(purchaseProductTable.getSelectionModel().getSelectedItems()));
 
         purchaseProductPane.setOnMouseClicked(event -> purchaseProductTable.getSelectionModel().clearSelection());
@@ -221,6 +220,7 @@ public class PurchaseController implements Initializable {
             moreDetails.setOnAction(event -> {
                 table.getSelectionModel().select(getTableRow().getIndex());
                 int i = table.getSelectionModel().getSelectedIndex();
+                ViewPurchasedProductController.selectedPurchaseData =  (Purchase) table.getSelectionModel().getSelectedItem();
                 ViewPurchasedProductController.purchaseProductDatabaseRef = purchaseProductsDatabaseRef.get(i);
                 JFXUtil.popUpWindows("layout/Purchase/ViewPurchaseProduct.fxml", event);
             });

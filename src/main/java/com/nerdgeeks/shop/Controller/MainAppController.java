@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
-public class LoginController implements Initializable{
+public class MainAppController implements Initializable{
 
     public JFXTextField usernameField;
     public JFXPasswordField passwordField;

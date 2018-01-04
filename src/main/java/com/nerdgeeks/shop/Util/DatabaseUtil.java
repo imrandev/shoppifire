@@ -62,6 +62,7 @@ public class DatabaseUtil {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                dataListener.onFailure(databaseError);
             }
         });
     }
@@ -98,7 +99,6 @@ public class DatabaseUtil {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
         return supplierName;
@@ -122,18 +122,29 @@ public class DatabaseUtil {
                 });
     }
 
-    //get product Name by supplier
-    public static ObservableList getProductNameForSupplier(String SupplierName){
+    //get all product Name by supplier
+    public static ObservableList getProductDetailsForSupplier(String SupplierName, String productChild){
 
-        ObservableList productName = FXCollections.observableArrayList();
+        ObservableList<String> productChildDetails = FXCollections.observableArrayList();
 
         firebaseDatabase.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME).child(SupplierName).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot rootCategory: dataSnapshot.getChildren()){
                     for(DataSnapshot rootProduct: rootCategory.getChildren()) {
+
                         Product product = rootProduct.getValue(Product.class);
-                        productName.add(product.getProductName());
+                        switch(productChild) {
+                            case "productName" :
+                                productChildDetails.add(product.getProductName());
+                                break;
+                            case "productId" :
+                                productChildDetails.add(product.getProductId());
+                                break;
+                            case "productBuyingPrice" :
+                                productChildDetails.add(product.getBuyingPrice());
+                                break;
+                        }
                     }
                 }
             }
@@ -142,53 +153,7 @@ public class DatabaseUtil {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-        return productName;
+        return productChildDetails;
     }
-
-
-    //get product Id by supplier
-    public static ObservableList getProductIdForSupplier(String SupplierName){
-
-        ObservableList<String> productId = FXCollections.observableArrayList();
-
-        firebaseDatabase.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME).child(SupplierName).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot1) {
-                for(DataSnapshot rootCategory: dataSnapshot1.getChildren()){
-                    for(DataSnapshot rootProduct: rootCategory.getChildren()){
-                        Product singleProduct = rootProduct.getValue(Product.class);
-                        productId.add(singleProduct.getProductId());
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-        return productId;
-    }
-
-    //get product Id by supplier
-    public static ObservableList getProductBuyingPriceForSupplier(String SupplierName){
-
-        ObservableList<String> productBuyingPrice = FXCollections.observableArrayList();
-
-        firebaseDatabase.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME).child(SupplierName).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot1) {
-                for(DataSnapshot rootCategory: dataSnapshot1.getChildren()){
-                    for(DataSnapshot rootProduct: rootCategory.getChildren()){
-                        Product singleProduct = rootProduct.getValue(Product.class);
-                        productBuyingPrice.add(singleProduct.getBuyingPrice());
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-        return productBuyingPrice;
-    }
-
 }
 

@@ -22,6 +22,8 @@ public class AppConstant {
     public static String[] SUPPLIERS_TABLE_COLUMN_NAME = {"supplierName","supplierNo", "supplierAddress","supplierDescription"};
 
     //For Supplier Table View Column Name
-    public static String[] PURCHASE_TABLE_COLUMN_NAME = {"supplierName", "totalBuyingPrice","totalPaid","purchaseMonth","purchaseDate","Products"};
+    public static String[] PURCHASE_TABLE_COLUMN_NAME = {"supplierName", "totalBuyingPrice","totalPaid","totalDue","purchaseMonth","purchaseDate","Products"};
 
+    //For Stock Table View Column Name
+    public static final String[] STOCK_TABLE_COLUMN_NAME = {"productId","productName","productCategory","productSupplier", "inStock"};
 }

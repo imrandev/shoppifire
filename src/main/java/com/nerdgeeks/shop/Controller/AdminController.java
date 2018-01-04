@@ -103,6 +103,7 @@ public class AdminController implements Initializable {
     @FXML
     public void stockAction(ActionEvent event) {
         closeNav();
+        setDataPane(fadeAnimate("/layout/Stock/Stock.fxml"));
         setNavigationButtonCurrentStateStyle(stockButton);
     }
 

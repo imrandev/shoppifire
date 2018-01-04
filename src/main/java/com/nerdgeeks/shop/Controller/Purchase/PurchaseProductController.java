@@ -9,6 +9,7 @@ import com.nerdgeeks.shop.Model.PurchaseProduct;
 import com.nerdgeeks.shop.Util.AppConstant;
 import com.nerdgeeks.shop.Util.DatabaseUtil;
 import com.nerdgeeks.shop.Util.JFXUtil;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -64,27 +65,29 @@ public class PurchaseProductController implements Initializable{
         resetButtonAction();
 
         productSupplierField.valueProperty().addListener((observable, oldValue, newValue) -> {
-            supplierProductName = DatabaseUtil.getProductNameForSupplier(newValue.toString());
-            supplierProductId = DatabaseUtil.getProductIdForSupplier(newValue.toString());
-            supplierProductBuyingPrice = DatabaseUtil.getProductBuyingPriceForSupplier(newValue.toString());
+            supplierProductName = DatabaseUtil.getProductDetailsForSupplier(newValue.toString(),"productName");
+            supplierProductId = DatabaseUtil.getProductDetailsForSupplier(newValue.toString(),"productId");
+            supplierProductBuyingPrice = DatabaseUtil.getProductDetailsForSupplier(newValue.toString(),"productBuyingPrice");
             setProductNameForAllCombobox();
         });
 
         paidField.textProperty().addListener((observable, oldValue, newValue) -> {
 
             if (!newValue.isEmpty()) {
-                if (!newValue.matches("[0-9]+")) {
-                    JFXUtil.showAlertBox("Please input only Number Value");
-                    paidField.setText("");
-                }
-//                if(Integer.parseInt(newValue) > finalPrice){
-//                    JFXUtil.showAlertBox("Paid Value More then total value");
-//                    paidField.setText("");
-//                }
+
+                Platform.runLater(() -> {
+                    if (!newValue.matches("[0-9]+")) {
+                        JFXUtil.showAlertBox("Please input only Number Value");
+                        paidField.setText("");
+                    } else {
+                        if(Integer.parseInt(newValue) > finalPrice){
+                            JFXUtil.showAlertBox("Paid Value More then total value");
+                            paidField.setText("");
+                        }
+                    }
+                });
             }
-
         });
-
     }
 
     private void setProductNameForAllCombobox(){
@@ -146,12 +149,13 @@ public class PurchaseProductController implements Initializable{
             String supplier = productSupplierField.getSelectionModel().getSelectedItem().toString();
             String totalBuyingPrice = String.valueOf(finalPrice);
             String totalPaid = paidField.getText();
+            String totalDue = String.valueOf(Integer.valueOf(totalBuyingPrice) - Integer.valueOf(totalPaid));
             String currentMonth = JFXUtil.getCurrentMonth();
             String currentDate = JFXUtil.getCurrentDate();
             String purchaseConfirm = "false";
             String id = DatabaseUtil.firebaseDatabase.push().getKey();
 
-            Purchase Purchase = new Purchase(id, supplier, totalBuyingPrice, totalPaid, currentMonth,currentDate,purchaseConfirm);
+            Purchase Purchase = new Purchase(id, supplier, totalBuyingPrice, totalPaid, totalDue ,currentMonth,currentDate,purchaseConfirm);
 
             DatabaseUtil.firebaseDatabase.child(AppConstant.INVOICES_DATABASE_NODE_NAME)
                     .child(currentMonth)

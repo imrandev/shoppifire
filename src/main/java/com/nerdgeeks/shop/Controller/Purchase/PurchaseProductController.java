@@ -59,7 +59,7 @@ public class PurchaseProductController implements Initializable{
         productSupplierField.setItems(DatabaseUtil.getSupplierName());
         scrollPane.vvalueProperty().bind(gridPane.heightProperty());
         quantityField.setDisable(true);
-        totalBuyingPriceField.setDisable(true);
+        totalBuyingPriceField.setEditable(false);
         dynamicFields.add(new DynamicField(productNameField,quantityField));
 
         resetButtonAction();

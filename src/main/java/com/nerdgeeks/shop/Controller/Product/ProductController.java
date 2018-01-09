@@ -45,7 +45,7 @@ public class ProductController implements Initializable {
     public void addButtonAction(ActionEvent actionEvent) {
         //data passing to controller class for further use
         AddProductController.category = category;
-        JFXUtil.popUpWindows("layout/Product/AddProduct.fxml",actionEvent);
+        JFXUtil.popUpWindows("layout/Product/AddProduct.fxml");
     }
 
     public void editButtonAction(ActionEvent actionEvent) {
@@ -53,7 +53,7 @@ public class ProductController implements Initializable {
         Product selectedProduct =  (Product) productTable.getSelectionModel().getSelectedItem();
         UpdateProductController.updateProduct = selectedProduct;
         UpdateProductController.category = category;
-        JFXUtil.popUpWindows("layout/Product/UpdateProduct.fxml",actionEvent);
+        JFXUtil.popUpWindows("layout/Product/UpdateProduct.fxml");
     }
 
 

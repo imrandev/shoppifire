@@ -83,6 +83,36 @@ public class DatabaseUtil {
         });
     }
 
+    //remove supplier from database
+    public static void delSupplier(String supplierId) {
+        firebaseDatabase.child(AppConstant.SUPPLIERS_DATABASE_NODE_NAME)
+                .child(supplierId)
+                .removeValue((databaseError, databaseReference) -> {
+                });
+    }
+
+    //remove products from database
+    public static void delProduct(String supplierName, String productCategory, String productId) {
+        firebaseDatabase.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME)
+                .child(supplierName)
+                .child(productCategory)
+                .child(productId)
+                .removeValue((databaseError, databaseReference) -> {
+                });
+    }
+
+    //remove purchase record from database
+    public static void delPurchaseRecord(String purchaseMonth, String purchaseDate, String purchaseSupplier, String purchaseId) {
+        firebaseDatabase.child(AppConstant.INVOICES_DATABASE_NODE_NAME)
+                .child(purchaseMonth)
+                .child(purchaseDate)
+                .child(AppConstant.PURCHASE_DATABASE_NODE_NAME)
+                .child(purchaseSupplier)
+                .child(purchaseId)
+                .removeValue((databaseError, databaseReference) -> {
+                });
+    }
+
     //Get all supplier name
     public static ObservableList getSupplierName() {
 
@@ -102,24 +132,6 @@ public class DatabaseUtil {
             }
         });
         return supplierName;
-    }
-
-    //remove supplier from database
-    public static void delSupplier(String supplierId) {
-        firebaseDatabase.child(AppConstant.SUPPLIERS_DATABASE_NODE_NAME)
-                .child(supplierId)
-                .removeValue((databaseError, databaseReference) -> {
-                });
-    }
-
-    //remove products from database
-    public static void delProduct(String supplierName, String productCategory, String productId) {
-        firebaseDatabase.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME)
-                .child(supplierName)
-                .child(productCategory)
-                .child(productId)
-                .removeValue((databaseError, databaseReference) -> {
-                });
     }
 
     //get all product Name by supplier

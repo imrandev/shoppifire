@@ -37,6 +37,8 @@ public class UpdateProductController implements Initializable{
 
         productCategoryField.setItems(category);
 
+        productIdField.setEditable(false);
+
         productCategoryField.getSelectionModel().select(updateProduct.getProductCategory());
         productNameField.setText(updateProduct.getProductName());
         productIdField.setText(updateProduct.getProductId());

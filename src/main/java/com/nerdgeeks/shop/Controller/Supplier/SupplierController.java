@@ -42,13 +42,13 @@ public class SupplierController implements Initializable {
 
     public void addButtonAction(ActionEvent actionEvent) {
 
-        JFXUtil.popUpWindows("layout/Supplier/AddSupplier.fxml",actionEvent);
+        JFXUtil.popUpWindows("layout/Supplier/AddSupplier.fxml");
     }
 
     public void editButtonAction(ActionEvent actionEvent) {
         Supplier selectedSupplier =  (Supplier) supplierTable.getSelectionModel().getSelectedItem();
         EditSupplierController.editSupplier = selectedSupplier;
-        JFXUtil.popUpWindows("layout/Supplier/EditSupplier.fxml",actionEvent);
+        JFXUtil.popUpWindows("layout/Supplier/EditSupplier.fxml");
     }
 
     public void deleteButtonAction(ActionEvent actionEvent) {

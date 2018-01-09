@@ -57,7 +57,7 @@ public class JFXUtil {
     }
 
     // show the popup windows
-    public static void popUpWindows(String FXMLPath, ActionEvent event) {
+    public static void popUpWindows(String FXMLPath) {
         try {
             URL myFxmlURL = ClassLoader.getSystemResource(FXMLPath);
             Parent root = FXMLLoader.load(myFxmlURL);

@@ -41,7 +41,7 @@ public class ViewPurchasedProductController implements Initializable{
 
         viewPurchasedTable.getColumns().clear();
         String[] colName = {"productName","productQuantity"};
-        totalDueField.setDisable(true);
+        totalDueField.setEditable(false);
         updateDueBtn.setDisable(true);
 
         String totalDue = selectedPurchaseData.getTotalDue();
@@ -90,7 +90,7 @@ public class ViewPurchasedProductController implements Initializable{
 
                if (purchaseConfirm.equals("true")){
                    confirmButton.setDisable(true);
-                   confirmButton.setText("Product's Already Received.");
+                   confirmButton.setText("Product's Already Received");
                } else {
                    confirmButton.setDisable(false);
                }
@@ -104,7 +104,8 @@ public class ViewPurchasedProductController implements Initializable{
 
     }
 
-    public void productReceivedConfirmButtonAction(ActionEvent actionEvent) {
+    @FXML
+    public void productReceivedConfirmButtonAction() {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
@@ -151,7 +152,8 @@ public class ViewPurchasedProductController implements Initializable{
         });
     }
 
-    public void actionUpdateDue(ActionEvent actionEvent) {
+    @FXML
+    public void actionUpdateDue() {
 
         String updatePaidValue = String.valueOf(Integer.valueOf(selectedPurchaseData.getTotalPaid())
                 +Integer.valueOf(paidField.getText()));

@@ -26,8 +26,7 @@ repositories {
 
 dependencies{
     compile fileTree(dir: 'lib' , include: '*.jar')
-    compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.12'
-
+    //compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.12'
 }
 
 task fatJar(type: Jar) {

@@ -20,6 +20,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
+
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -65,6 +68,36 @@ public class PurchaseController implements Initializable {
                 resetButton.setDisable(true);
             }
         });
+
+//        purchaseProductTable.setRowFactory(row -> new TableRow<>() {
+//            @Override
+//            public void updateItem(Purchase item, boolean empty) {
+//                super.updateItem(item, empty);
+//
+//                if (item == null || empty) {
+//                    setStyle("");
+//                } else {
+//                    //Now 'item' has all the info of the Person in this row
+//                    if (item.getPurchaseConfirm().equals("false")) {
+//                        //We apply now the changes in all the cells of the row
+//                        for (int i = 0; i < getChildren().size(); i++) {
+//                            ((Labeled) getChildren().get(i)).setTextFill(Color.WHITE);
+//                            getChildren().get(i).setStyle("-fx-background-color: red");
+//                        }
+//                    } else {
+////                        if (getTableView().getSelectionModel().getSelectedItems().contains(item)) {
+////                            for (int i = 0; i < getChildren().size(); i++) {
+////                                ((Labeled) getChildren().get(i)).setTextFill(Color.WHITE);
+////                            }
+////                        } else {
+////                            for (int i = 0; i < getChildren().size(); i++) {
+////                                ((Labeled) getChildren().get(i)).setTextFill(Color.BLACK);
+////                            }
+////                        }
+//                    }
+//                }
+//            }
+//        });
     }
 
 
@@ -159,15 +192,16 @@ public class PurchaseController implements Initializable {
         //Initialize the table Column and column value
         for(String aColName : colName) {
             String name = aColName.replace(columnFor, "");
-            TableColumn column;
+            TableColumn column1;
             if(aColName.equals("Products") && tableData != null){
-                column = new TableColumn("Action");
-                column.setCellFactory(param -> new AddProductShowButton(table)); // add button in action cell for every row
+                column1 = new TableColumn("Action");
+                column1.setCellFactory(param -> new AddProductShowButton(table)); // add button in action cell for every row
             } else {
-                column = new TableColumn(name);
-                column.setCellValueFactory(new PropertyValueFactory(aColName)); //indicate the table column to model column
+                column1 = new TableColumn(name);
+                column1.setCellValueFactory(new PropertyValueFactory(aColName)); //indicate the table column to model column
             }
-            table.getColumns().add(column);
+
+            table.getColumns().add(column1);
         }
         table.setItems(tableData);            //Set All data to table
     }

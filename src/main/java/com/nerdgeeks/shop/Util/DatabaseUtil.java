@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;
 import com.nerdgeeks.shop.Model.Product;
+import com.nerdgeeks.shop.Model.Stock;
 import com.nerdgeeks.shop.Model.Supplier;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -167,5 +168,48 @@ public class DatabaseUtil {
         });
         return productChildDetails;
     }
+
+    // get all stock quantity with product details
+    public static ObservableList<Stock> getStockDataWithProductDetails(){
+
+        ObservableList<Stock> stockData = FXCollections.observableArrayList();
+
+        firebaseDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(stockData.size()>0){
+                    stockData.clear();
+                }
+
+                for (DataSnapshot snapshot : dataSnapshot.child(AppConstant.STOCK_DATABASE_NODE_NAME).getChildren()){
+
+                    Stock stock = snapshot.getValue(Stock.class);
+
+                    //Now get product details using product id from database
+                    for(DataSnapshot rootSupplier: dataSnapshot.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME).getChildren()){
+                        for(DataSnapshot rootCategory: rootSupplier.getChildren()){
+                            for(DataSnapshot rootProduct: rootCategory.getChildren()){
+                                if (rootProduct.getKey().equals(snapshot.getKey())){
+                                    Product product = rootProduct.getValue(Product.class);
+                                    Stock stockWithProductDetails = new Stock(product.getProductId(),product.getProductName(),product.getProductCategory(),product.getProductSupplier(),stock.getInStock());
+                                    stockData.add(stockWithProductDetails);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return stockData;
+    }
+
+
 }
 

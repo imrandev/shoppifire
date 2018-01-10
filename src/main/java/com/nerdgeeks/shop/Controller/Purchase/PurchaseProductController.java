@@ -18,11 +18,13 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -118,7 +120,6 @@ public class PurchaseProductController implements Initializable{
             });
         }
     }
-
 
     private void totalPriceCalculation() {
 

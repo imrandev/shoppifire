@@ -19,6 +19,11 @@ public class Stock {
         this.inStock = inStock;
     }
 
+    public Stock(String productId, String inStock){
+        this.inStock = inStock;
+        this.productId = productId;
+    }
+
     public String getProductId() {
         return productId;
     }

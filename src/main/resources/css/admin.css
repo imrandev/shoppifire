@@ -22,7 +22,7 @@ MenuButton{
 
 .floating-button {
     -fx-pref-width: 50px;
-    -fx-background-color: cornflowerblue;
+    -fx-background-color: #ffffff00;
     -fx-background-radius: 50px;
     -fx-pref-height: 50px;
     -fx-text-fill: white;
@@ -159,4 +159,9 @@ MenuButton{
 
 .hbox-header {
     -fx-background-color: rgba(250, 250, 250, 1);
+}
+
+.table {
+    -fx-font-size: 17;
+    -fx-font-family: "Arkhip_font";
 }

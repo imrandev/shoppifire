@@ -36,7 +36,7 @@ public class MainAppController implements Initializable{
         email = usernameField.getText();
         pwd = passwordField.getText();
 
-        showAdminPanel(actionEvent);
+        showEmpPanel(actionEvent);
 
 //        if(!verification())
 //            return;
@@ -73,7 +73,7 @@ public class MainAppController implements Initializable{
 
     @FXML
     private void showEmpPanel(ActionEvent actionEvent) {
-
+        windows("layout/sell/Sell.fxml","Employee Panel", actionEvent);
     }
 
     @FXML

@@ -120,7 +120,7 @@
 //                .setPassword(empPassword);
 //
 //        UserRecord userRecord = FirebaseAuth.getInstance().createUserAsync(request).get();
-//        System.out.println("Successfully Created one employee: " + userRecord.getUid());
+//        System.out.println("Successfully Created one sell: " + userRecord.getUid());
 //    }
 //
 //

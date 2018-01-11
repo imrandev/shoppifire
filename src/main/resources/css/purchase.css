@@ -1,0 +1,7 @@
+.combo-box {
+    -fx-background-color: #ffffff00;
+}
+
+.list-cell:selected{
+    -fx-text-fill: black;
+}

@@ -1,15 +1,18 @@
 package com.nerdgeeks.shop;
 
+import com.jfoenix.svg.SVGGlyphLoader;
 import com.nerdgeeks.shop.Util.DatabaseUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.net.URL;
 
 
@@ -29,6 +32,11 @@ public  class MainApp extends Application {
         //Initialize the firebase database with the default app
         DatabaseUtil fireDatabase = new DatabaseUtil();
         fireDatabase.ConnectFirebase();
+
+        Font.loadFont(
+                MainApp.class.getResource("/fonts/Arkhip_font.ttf").toExternalForm(),
+                10
+        );
 
         mainStage =stage;
         URL myFxmlURL = ClassLoader.getSystemResource("layout/MainApp.fxml");

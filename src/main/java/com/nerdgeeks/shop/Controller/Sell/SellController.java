@@ -12,8 +12,6 @@ import com.nerdgeeks.shop.Util.DatabaseUtil;
 import com.nerdgeeks.shop.Util.JFXUtil;
 import com.nerdgeeks.shop.Util.OnGetDataListener;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -21,39 +19,36 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SellController implements Initializable {
-    public TextField searchField;
-    public TableView productTableView;
-    public TableView listTableView;
-    public TextField productField;
-    public TextField priceField;
-    public TextField quantityField;
+
+    public TextField searchField, productField, priceField, quantityField,
+                    subTotalField, vatField, discountField, netPayableField;
+
+    public TableView productTableView, listTableView;
     public Label quantityLabel;
-    public TextField subTotalField;
-    public TextField vatField;
-    public TextField discountField;
-    public TextField netPayableField;
     public VBox sellPane;
-    public JFXButton addButton;
-    public JFXButton removeButton;
-    public JFXButton paymentButton;
+    public JFXButton addButton, removeButton, paymentButton;
+
     private ObservableList<Product> stockData = FXCollections.observableArrayList();
     private ObservableList<Stock> stockCount = FXCollections.observableArrayList();
     private ObservableList<Product> filterList = FXCollections.observableArrayList();
     private ObservableList<SellProductModel> productModels = FXCollections.observableArrayList();
-    private double temp;
+    private FilteredList<Product> filteredData = new FilteredList<>(stockData, s -> true);
+
+    private double subTotal;
     private String vat;
     private double tempVat;
-    private FilteredList<Product> filteredData = new FilteredList<>(stockData, s -> true);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setTableColumnDataForSupplier();
+
+        setColumnDataForProductTable();
+
         onButtonSetUpDisable(true);
+
         productTableView.setRowFactory(tv -> {
             TableRow<ObservableList> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -84,6 +79,10 @@ public class SellController implements Initializable {
         JFXUtil.setTableData(listTableView, SellColName, productModels);
 
         removeButton.disableProperty().bind(Bindings.isEmpty(listTableView.getSelectionModel().getSelectedItems()));
+        sellPane.setOnMouseClicked(event -> {
+            listTableView.getSelectionModel().clearSelection();
+            productTableView.getSelectionModel().clearSelection();
+        });
     }
 
     private void onButtonSetUpDisable(boolean isDisable) {
@@ -94,29 +93,24 @@ public class SellController implements Initializable {
             addButton.setDisable(true);
         }
 
-        quantityField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue.isEmpty()){
-                    addButton.setDisable(true);
-                } else {
-                    addButton.setDisable(false);
-                }
+        quantityField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEmpty()){
+                addButton.setDisable(true);
+            } else {
+                addButton.setDisable(false);
             }
         });
     }
 
     private void onFilterSellProductTableList() {
-        searchField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
 
-                if(newValue == null || newValue.length() == 0) {
-                    filteredData.setPredicate(s -> true);
-                }
-                else {
-                    filteredData.setPredicate(s -> s.getProductName().toLowerCase().contains(newValue.toLowerCase()));
-                }
+            if(newValue == null || newValue.length() == 0) {
+                filteredData.setPredicate(s -> true);
+            }
+            else {
+                filteredData.setPredicate(s -> s.getProductName().toLowerCase().contains(newValue.toLowerCase()));
+            }
 
 //                if (newValue.equals("")) {
 //                    String[] SellColName = {"productName"};
@@ -139,14 +133,13 @@ public class SellController implements Initializable {
 //                    String[] SellColName = {"productName"};
 //                    JFXUtil.setTableData(productTableView, SellColName, filteredData);
 //                }
-                //set the column name and initialize column with database column
-                String[] SellColName = {"productName"};
-                JFXUtil.setTableData(productTableView, SellColName, filteredData);
-            }
+            //set the column name and initialize column with database column
+            String[] SellColName = {"productName"};
+            JFXUtil.setTableData(productTableView, SellColName, filteredData);
         });
     }
 
-    private void setTableColumnDataForSupplier() {
+    private void setColumnDataForProductTable() {
         //Firebase Database get data and set data to table
         DatabaseUtil.getDataValueEvent(AppConstant.STOCK_DATABASE_NODE_NAME, new OnGetDataListener() {
             @Override
@@ -182,9 +175,9 @@ public class SellController implements Initializable {
                     });
                 }
                 //set the column name and initialize column with database column
-                String[] SupplierColName = {"productName"};
+                String[] ProductTableColName = {"productName"};
 
-                JFXUtil.setTableData(productTableView, SupplierColName, stockData);
+                JFXUtil.setTableData(productTableView, ProductTableColName, stockData);
             }
 
             @Override
@@ -210,8 +203,8 @@ public class SellController implements Initializable {
         SellProductModel model = new SellProductModel(product, unitPrice, quantity, total);
         productModels.add(model);
 
-        temp += total;
-        subTotalField.setText("" + temp);
+        subTotal += total;
+        subTotalField.setText("" + subTotal);
 
         double v = (total * Double.parseDouble(vat)) / 100;
         tempVat += v;
@@ -222,9 +215,9 @@ public class SellController implements Initializable {
 
     public void removeAction(ActionEvent actionEvent) {
         int index = listTableView.getSelectionModel().getSelectedIndex();
-        temp -= productModels.get(index).getTotal();
+        subTotal -= productModels.get(index).getTotal();
         productModels.remove(index);
-        subTotalField.setText("" + temp);
+        subTotalField.setText("" + subTotal);
 
         if (listTableView.getItems().isEmpty()) {
             paymentButton.setDisable(true);
@@ -245,7 +238,7 @@ public class SellController implements Initializable {
 
     public void clearAction(ActionEvent actionEvent) {
         listTableView.getItems().clear();
-        temp = 0;
+        subTotal = 0;
         tempVat = 0;
         subTotalField.setText("");
         vatField.setText("");

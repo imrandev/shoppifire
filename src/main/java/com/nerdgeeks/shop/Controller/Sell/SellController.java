@@ -12,6 +12,8 @@ import com.nerdgeeks.shop.Util.DatabaseUtil;
 import com.nerdgeeks.shop.Util.JFXUtil;
 import com.nerdgeeks.shop.Util.OnGetDataListener;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -35,18 +37,18 @@ public class SellController implements Initializable {
     private ObservableList<Product> stockData = FXCollections.observableArrayList();
     private ObservableList<Stock> stockCount = FXCollections.observableArrayList();
     private ObservableList<Product> filterList = FXCollections.observableArrayList();
-    private ObservableList<SellProductModel> productModels = FXCollections.observableArrayList();
+    public static ObservableList<SellProductModel> productModels = FXCollections.observableArrayList();
     private FilteredList<Product> filteredData = new FilteredList<>(stockData, s -> true);
 
     private double subTotal;
     private String vat;
     private double tempVat;
+    private double netPayable;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         setColumnDataForProductTable();
-
         onButtonSetUpDisable(true);
 
         productTableView.setRowFactory(tv -> {
@@ -83,6 +85,19 @@ public class SellController implements Initializable {
             listTableView.getSelectionModel().clearSelection();
             productTableView.getSelectionModel().clearSelection();
         });
+
+        discountField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(newValue == null || newValue.length() == 0) {
+                    netPayableField.setText("" + netPayable);
+                } else {
+                    double total = netPayable - Double.parseDouble(newValue);
+                    netPayableField.setText("" + total);
+                    System.out.print(newValue);
+                }
+            }
+        });
     }
 
     private void onButtonSetUpDisable(boolean isDisable) {
@@ -111,28 +126,6 @@ public class SellController implements Initializable {
             else {
                 filteredData.setPredicate(s -> s.getProductName().toLowerCase().contains(newValue.toLowerCase()));
             }
-
-//                if (newValue.equals("")) {
-//                    String[] SellColName = {"productName"};
-//                    JFXUtil.setTableData(productTableView, SellColName, stockData);
-//                    quantityLabel.setText("Stock: ");
-//                    filterList.clear();
-//                    vat = "";
-//                } else {
-//                    if (filterList.size() > 0) {
-//                        filterList.clear();
-//                    }
-//                    String value = newValue.toLowerCase();
-//                    for (Product product : stockData) {
-//                        String name = product.getProductName().toLowerCase();
-//                        if (name.contains(value)) {
-//                            filterList.add(product);
-//                        }
-//                    }
-//                    //set the column name and initialize column with database column
-//                    String[] SellColName = {"productName"};
-//                    JFXUtil.setTableData(productTableView, SellColName, filteredData);
-//                }
             //set the column name and initialize column with database column
             String[] SellColName = {"productName"};
             JFXUtil.setTableData(productTableView, SellColName, filteredData);
@@ -141,50 +134,41 @@ public class SellController implements Initializable {
 
     private void setColumnDataForProductTable() {
         //Firebase Database get data and set data to table
-        DatabaseUtil.getDataValueEvent(AppConstant.STOCK_DATABASE_NODE_NAME, new OnGetDataListener() {
+        DatabaseUtil.firebaseDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onSuccess(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 if (stockData.size() > 0) {
                     stockData.clear();
+                    stockCount.clear();
                 }
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                for (DataSnapshot snapshot : dataSnapshot.child(AppConstant.STOCK_DATABASE_NODE_NAME).getChildren()) {
                     Stock stock = snapshot.getValue(Stock.class);
                     String count = stock.getInStock();
                     Stock s = new Stock(snapshot.getKey(), count);
                     stockCount.add(s);
                     //Now get product details using product id from database
-                    DatabaseUtil.firebaseDatabase.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot rootSupplier : dataSnapshot.getChildren()) {
-                                for (DataSnapshot rootCategory : rootSupplier.getChildren()) {
-                                    for (DataSnapshot rootProduct : rootCategory.getChildren()) {
-                                        if (rootProduct.getKey().equals(snapshot.getKey())) {
-                                            Product product = rootProduct.getValue(Product.class);
-                                            stockData.add(product);
-                                        }
-                                    }
+                    for (DataSnapshot rootSupplier : dataSnapshot.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME).getChildren()) {
+                        for (DataSnapshot rootCategory : rootSupplier.getChildren()) {
+                            for (DataSnapshot rootProduct : rootCategory.getChildren()) {
+                                if (rootProduct.getKey().equals(snapshot.getKey())) {
+                                    Product product = rootProduct.getValue(Product.class);
+                                    stockData.add(product);
                                 }
                             }
-
                         }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
+                    }
                 }
-                //set the column name and initialize column with database column
-                String[] ProductTableColName = {"productName"};
-
-                JFXUtil.setTableData(productTableView, ProductTableColName, stockData);
             }
 
             @Override
-            public void onFailure(DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+
+        //set the column name and initialize column with database column
+        String[] ProductTableColName = {"productName"};
+        JFXUtil.setTableData(productTableView, ProductTableColName, stockData);
     }
 
     public void logoutAction(ActionEvent actionEvent) {
@@ -192,6 +176,8 @@ public class SellController implements Initializable {
 
     public void addAction(ActionEvent actionEvent) {
         String product = productField.getText();
+        Product product1 = (Product) productTableView.getSelectionModel().getSelectedItem();
+        String id = product1.getProductId();
         String qt = quantityField.getText();
         if (qt.isEmpty()){
             return;
@@ -200,7 +186,7 @@ public class SellController implements Initializable {
         int quantity = Integer.parseInt(qt);
 
         double total = quantity * unitPrice;
-        SellProductModel model = new SellProductModel(product, unitPrice, quantity, total);
+        SellProductModel model = new SellProductModel(id, product, unitPrice, quantity, total);
         productModels.add(model);
 
         subTotal += total;
@@ -210,6 +196,9 @@ public class SellController implements Initializable {
         tempVat += v;
         vatField.setText("" + tempVat);
         paymentButton.setDisable(false);
+
+        netPayable = subTotal + tempVat;
+        netPayableField.setText("" + netPayable);
         resetAction(actionEvent);
     }
 
@@ -234,6 +223,9 @@ public class SellController implements Initializable {
     }
 
     public void paymentAction(ActionEvent actionEvent) {
+        CheckoutController.totalAmount = netPayable;
+        CheckoutController.Products = productModels;
+        JFXUtil.popUpWindows("layout/sell/Checkout.fxml");
     }
 
     public void clearAction(ActionEvent actionEvent) {

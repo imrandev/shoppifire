@@ -1,6 +1,8 @@
 package com.nerdgeeks.shop.Util;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;
@@ -16,6 +18,10 @@ import java.util.logging.Logger;
 public class DatabaseUtil {
 
     public static DatabaseReference firebaseDatabase;
+
+    public DatabaseUtil(){
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
 
     //find the firebase database JSON config file
     private InputStream findFile() {

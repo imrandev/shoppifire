@@ -1,5 +1,7 @@
 package com.nerdgeeks.shop;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jfoenix.svg.SVGGlyphLoader;
 import com.nerdgeeks.shop.Util.DatabaseUtil;
 import javafx.application.Application;

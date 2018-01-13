@@ -227,7 +227,7 @@
                                           <Font size="18.0" />
                                        </font>
                                                 </TextField>
-                                                <TextField fx:id="discountField" alignment="CENTER" editable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="120.0" text="5.00" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                                                <TextField fx:id="discountField" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="120.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                                                     <GridPane.margin>
                                                         <Insets right="10.0" />
                                                     </GridPane.margin>

@@ -10,6 +10,7 @@ public class Purchase {
     ObservableList<PurchaseProduct> purchaseProducts = FXCollections.observableArrayList();
 
     public Purchase() {
+
     }
 
     public Purchase(String purchaseId, String supplierName, String totalBuyingPrice, String totalPaid, String totalDue, String purchaseMonth, String purchaseDate, String purchaseConfirm) {

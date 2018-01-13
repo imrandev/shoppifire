@@ -1,5 +1,6 @@
 package com.nerdgeeks.shop.Controller;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.nerdgeeks.shop.MainApp;
@@ -37,6 +38,7 @@ public class MainAppController implements Initializable{
         pwd = passwordField.getText();
 
         showEmpPanel(actionEvent);
+        //showAdminPanel(actionEvent);
 
 //        if(!verification())
 //            return;

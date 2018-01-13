@@ -1,22 +1,33 @@
 package com.nerdgeeks.shop.Model;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 public class SellProductModel {
     private String productName;
     private double unitPrice;
     private int quantity;
     private double total;
-    private ObservableList<Double> productModels = FXCollections.observableArrayList();
-    private double t;
+    private String id;
 
-    public SellProductModel(String productName, double unitPrice, int quantity, double total) {
+    public SellProductModel(String id, String productName, int quantity, double total) {
+        this.id = id;
+        this.productName = productName;
+        this.total = total;
+        this.quantity = quantity;
+    }
+
+    public SellProductModel(String id, String productName, double unitPrice, int quantity, double total) {
+        this.id = id;
         this.productName = productName;
         this.unitPrice = unitPrice;
         this.quantity = quantity;
         this.total = total;
-        //productModels.add(total);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getProductName() {
@@ -51,11 +62,4 @@ public class SellProductModel {
         this.total = total;
     }
 
-    public void setSubTotalPrice(double temp){
-        t += temp;
-    }
-
-    public double getSubTotalPrice(){
-        return t;
-    }
 }

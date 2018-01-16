@@ -31,7 +31,7 @@ public class CheckoutController implements Initializable {
     public TextField paidAmountField;
     public static double totalAmount;
     public JFXButton printButton;
-    public static ObservableList<SellProductModel> Products = FXCollections.observableArrayList();
+    public static ObservableList<SellProductModel> sellProduct = FXCollections.observableArrayList();
     public JFXTextField returnAmount;
 
     @Override
@@ -39,26 +39,21 @@ public class CheckoutController implements Initializable {
 
         totalAmountField.setText("" + totalAmount);
 
-        paidAmountField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.isEmpty()) {
-                    Platform.runLater(() -> {
-                        if (!newValue.matches("[0-9]+")) {
-                            JFXUtil.showAlertBox("Please input only Number Value");
+        paidAmountField.textProperty().addListener((observable, oldValue, newValue) -> {
 
-                        } else {
-                            double paid = Double.parseDouble(newValue);
-                            if(paid > totalAmount){
-                                double returnValue = paid - totalAmount;
-                                returnAmount.setText("" + returnValue);
-                            }
+            if (!newValue.isEmpty()) {
+                Platform.runLater(() -> {
+                    if (!newValue.matches("[0-9]+")) {
+                        JFXUtil.showAlertBox("Please input only Number Value");
+
+                    } else {
+                        double paid = Double.parseDouble(newValue);
+                        if(paid > totalAmount){
+                            double returnValue = paid - totalAmount;
+                            returnAmount.setText("" + returnValue);
                         }
-                    });
-                }
-                else {
-                    returnAmount.setText("0");
-                }
+                    }
+                });
             }
         });
     }
@@ -72,7 +67,7 @@ public class CheckoutController implements Initializable {
         String currentMonth = JFXUtil.getCurrentMonth();
         String currentDate = JFXUtil.getCurrentDate();
 
-        CheckoutModel checkoutModel = new CheckoutModel(Products, totalAmount);
+        CheckoutModel checkoutModel = new CheckoutModel(sellProduct, totalAmount);
 
         DatabaseUtil.firebaseDatabase.child(AppConstant.INVOICES_DATABASE_NODE_NAME)
                 .child(currentMonth)
@@ -80,16 +75,17 @@ public class CheckoutController implements Initializable {
                 .child(AppConstant.SELL_DATABASE_NODE_NAME)
                 .child(id)
                 .setValue(checkoutModel, (databaseError, databaseReference) -> {
-                    for (SellProductModel sell : Products){
-                        updateStockItem(sell.getId(), sell.getQuantity());
+                    for (SellProductModel sell : sellProduct){
+                        updateStockItem(sell.getProductId(), sell.getQuantity());
                     }
-                    SellController.productModels.clear();
                 });
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Successful");
         alert.setHeaderText("Product Sold Successfully");
         alert.show();
+
+        ((Stage) printButton.getScene().getWindow()).close();
     }
 
     private void updateStockItem(String productId, int productQuantity){

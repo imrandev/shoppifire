@@ -10,7 +10,6 @@ import com.nerdgeeks.shop.Model.Stock;
 import com.nerdgeeks.shop.Util.AppConstant;
 import com.nerdgeeks.shop.Util.DatabaseUtil;
 import com.nerdgeeks.shop.Util.JFXUtil;
-import com.nerdgeeks.shop.Util.OnGetDataListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -40,10 +39,8 @@ public class SellController implements Initializable {
     public static ObservableList<SellProductModel> productModels = FXCollections.observableArrayList();
     private FilteredList<Product> filteredData = new FilteredList<>(stockData, s -> true);
 
-    private double subTotal;
+    private double total, subTotal, tempVat, netPayable;
     private String vat;
-    private double tempVat;
-    private double netPayable;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -83,7 +80,7 @@ public class SellController implements Initializable {
         removeButton.disableProperty().bind(Bindings.isEmpty(listTableView.getSelectionModel().getSelectedItems()));
         sellPane.setOnMouseClicked(event -> {
             listTableView.getSelectionModel().clearSelection();
-            productTableView.getSelectionModel().clearSelection();
+            //productTableView.getSelectionModel().clearSelection();
         });
 
         discountField.textProperty().addListener(new ChangeListener<String>() {
@@ -158,6 +155,8 @@ public class SellController implements Initializable {
                         }
                     }
                 }
+
+                clearAction();
             }
 
             @Override
@@ -185,7 +184,7 @@ public class SellController implements Initializable {
         double unitPrice = Double.parseDouble(priceField.getText());
         int quantity = Integer.parseInt(qt);
 
-        double total = quantity * unitPrice;
+        total = quantity * unitPrice;
         SellProductModel model = new SellProductModel(id, product, unitPrice, quantity, total);
         productModels.add(model);
 
@@ -199,15 +198,17 @@ public class SellController implements Initializable {
 
         netPayable = subTotal + tempVat;
         netPayableField.setText("" + netPayable);
+
         resetAction(actionEvent);
     }
+
 
     public void removeAction(ActionEvent actionEvent) {
         int index = listTableView.getSelectionModel().getSelectedIndex();
         subTotal -= productModels.get(index).getTotal();
-        productModels.remove(index);
         subTotalField.setText("" + subTotal);
 
+        productModels.remove(index);
         if (listTableView.getItems().isEmpty()) {
             paymentButton.setDisable(true);
         }
@@ -224,16 +225,19 @@ public class SellController implements Initializable {
 
     public void paymentAction(ActionEvent actionEvent) {
         CheckoutController.totalAmount = netPayable;
-        CheckoutController.Products = productModels;
+        CheckoutController.sellProduct = productModels;
         JFXUtil.popUpWindows("layout/sell/Checkout.fxml");
     }
 
-    public void clearAction(ActionEvent actionEvent) {
+    public void clearAction() {
         listTableView.getItems().clear();
         subTotal = 0;
         tempVat = 0;
-        subTotalField.setText("");
-        vatField.setText("");
+        netPayable = 0;
+        netPayableField.setText("0.00");
+        discountField.setText("0");
+        subTotalField.setText("0.00");
+        vatField.setText("0.00");
         paymentButton.setDisable(true);
     }
 }

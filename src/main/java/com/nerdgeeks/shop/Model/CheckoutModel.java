@@ -1,14 +1,16 @@
 package com.nerdgeeks.shop.Model;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class CheckoutModel {
-    private ObservableList<SellProductModel> Products = FXCollections.observableArrayList();
+    private ObservableList<SellProductModel> Products;
     private double netTotal;
 
-    public CheckoutModel(ObservableList<SellProductModel> Products, double netTotal) {
-        this.Products = Products;
+    public CheckoutModel() {
+    }
+
+    public CheckoutModel(ObservableList<SellProductModel> products, double netTotal) {
+        Products = products;
         this.netTotal = netTotal;
     }
 
@@ -16,8 +18,8 @@ public class CheckoutModel {
         return Products;
     }
 
-    public void setProducts(ObservableList<SellProductModel> Products) {
-        this.Products = Products;
+    public void setProducts(ObservableList<SellProductModel> products) {
+        Products = products;
     }
 
     public double getNetTotal() {

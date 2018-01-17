@@ -1,33 +1,35 @@
 package com.nerdgeeks.shop.Model;
 
 public class SellProductModel {
-    private String productName;
+    private String productId, productName;
     private double unitPrice;
     private int quantity;
     private double total;
-    private String id;
 
-    public SellProductModel(String id, String productName, int quantity, double total) {
-        this.id = id;
-        this.productName = productName;
-        this.total = total;
-        this.quantity = quantity;
+    public SellProductModel() {
     }
 
-    public SellProductModel(String id, String productName, double unitPrice, int quantity, double total) {
-        this.id = id;
+    public SellProductModel(String productId, String productName, double unitPrice, int quantity, double total) {
+        this.productId = productId;
         this.productName = productName;
         this.unitPrice = unitPrice;
         this.quantity = quantity;
         this.total = total;
     }
 
-    public String getId() {
-        return id;
+    public SellProductModel(String productId, String productName, int quantity, double total) {
+        this.productId = productId;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.total = total;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getProductName() {
@@ -58,8 +60,7 @@ public class SellProductModel {
         return total;
     }
 
-    public void setTotal(double total){
+    public void setTotal(double total) {
         this.total = total;
     }
-
 }

@@ -22,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
@@ -56,16 +57,13 @@ public class SellController implements Initializable {
 
     private ObservableList<Product> stockData = FXCollections.observableArrayList();
     private ObservableList<Stock> stockCount = FXCollections.observableArrayList();
-    private ObservableList<SellProductModel> productModels = FXCollections.observableArrayList();
+    public static ObservableList<SellProductModel> productModels = FXCollections.observableArrayList();
     private FilteredList<Product> filteredData = new FilteredList<>(stockData, s -> true);
 
     private double subTotal;
-    private double tempVat;
     private double netPayable;
     private double xOffset = 0;
     private double yOffset = 0;
-
-    private ObservableList<Integer> vatItems = FXCollections.observableArrayList();
     private double total;
     private double v;
 
@@ -109,7 +107,6 @@ public class SellController implements Initializable {
         removeButton.disableProperty().bind(Bindings.isEmpty(listTableView.getSelectionModel().getSelectedItems()));
         anchorPane.setOnMouseClicked(event -> {
             listTableView.getSelectionModel().clearSelection();
-            productTableView.getSelectionModel().clearSelection();
         });
 
         discountField.textProperty().addListener(new ChangeListener<String>() {
@@ -147,13 +144,15 @@ public class SellController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 double value = Double.valueOf(newValue);
                 if (!vatField.getText().isEmpty()){
-                    double v = ( value * Double.parseDouble(vatField.getText())) / 100;
+                    v = ( value * Double.parseDouble(vatField.getText())) / 100;
                     netPayable = value + v;
                     vatAmount.setText("" + v);
                     netPayableField.setText("" + netPayable);
                 } else {
+                    netPayable = value;
                     netPayableField.setText("" + value);
                 }
+                System.out.print("" + netPayable);
             }
         });
 
@@ -231,7 +230,7 @@ public class SellController implements Initializable {
                         }
                     }
                 }
-                clearAction();
+                clearTable(false);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -310,19 +309,22 @@ public class SellController implements Initializable {
     }
 
     public void paymentAction(ActionEvent actionEvent) {
-        if (!discountField.getText().isEmpty()){
-            CheckoutController.totalAmount = total;
-        } else {
-            CheckoutController.totalAmount = netPayable;
-        }
+        System.out.print("" + netPayable);
+        CheckoutController.totalAmount = netPayable;
         CheckoutController.Products = productModels;
         JFXUtil.popUpWindows("layout/sell/Checkout.fxml");
     }
 
+    @FXML
     public void clearAction() {
-        listTableView.getItems().clear();
+        clearTable(true);
+    }
+
+    private void clearTable(boolean b) {
+        if (b){
+            listTableView.getItems().clear();
+        }
         subTotal = 0;
-        tempVat = 0;
         netPayable = 0;
         subTotalField.setText("0.0");
         vatField.setText("");

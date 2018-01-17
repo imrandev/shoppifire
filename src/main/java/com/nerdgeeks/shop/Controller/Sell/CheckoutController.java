@@ -83,9 +83,9 @@ public class CheckoutController implements Initializable {
                 .child(id)
                 .setValue(checkoutModel, (databaseError, databaseReference) -> {
                     for (SellProductModel sell : Products){
-                        updateStockItem(sell.getId(), sell.getQuantity());
+                        updateStockItem(sell.getProductId(), sell.getQuantity());
                     }
-
+                    SellController.productModels.clear();
                 });
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

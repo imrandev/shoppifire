@@ -16,7 +16,7 @@ public class AppConstant {
 
     //For Products Table View Column Name
     public static final String[] PRODUCTS_TABLE_COLUMN_NAME = {"productName", "buyingPrice",
-            "sellingPrice", "productVat","productCategory","productSupplier"};
+            "sellingPrice","productCategory","productSupplier"};
 
     //For Supplier Table View Column Name
     public static String[] SUPPLIERS_TABLE_COLUMN_NAME = {"supplierName","supplierNo", "supplierAddress","supplierDescription"};

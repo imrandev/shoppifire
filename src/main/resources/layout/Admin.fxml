@@ -12,54 +12,85 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="760.0" stylesheets="@../css/admin.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nerdgeeks.shop.Controller.AdminController">
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" stylesheets="@../css/admin.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nerdgeeks.shop.Controller.AdminController">
    <children>
-      <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="760.0" styleClass="hbox-top-background">
+      <VBox fx:id="vBox" prefHeight="100.0">
          <children>
-            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="200.0" styleClass="logo-background">
+            <HBox alignment="CENTER_LEFT" prefHeight="30.0" spacing="10.0" style="-fx-background-color: #0A596A;" VBox.vgrow="ALWAYS">
                <children>
-                  <ImageView fitHeight="56.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/logo.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="560.0" spacing="5.0" styleClass="control-background" HBox.hgrow="ALWAYS">
-               <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                  <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button fx:id="menu" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="hamburger-button" HBox.hgrow="ALWAYS">
+                        <Label prefHeight="30.0" text="ADMIN" textFill="WHITE">
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0">
+                     <children>
+                        <Button alignment="TOP_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#minusAction" prefHeight="20.0" prefWidth="20.0" styleClass="minus-button">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button alignment="TOP_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#closeAction" prefHeight="20.0" prefWidth="20.0" styleClass="close-button">
+                           <HBox.margin>
+                              <Insets right="5.0" />
                            </HBox.margin>
                         </Button>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="65.0" prefWidth="260.0" HBox.hgrow="ALWAYS">
+               </children>
+               <padding>
+                  <Insets right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+            <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" styleClass="hbox-top-background">
+               <children>
+                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" styleClass="logo-background">
                      <children>
-                        <Label fx:id="dateLabel" text="Date" textFill="WHITE">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
+                        <ImageView fitHeight="56.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/logo.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="65.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                  <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" spacing="5.0" styleClass="control-background" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutAction" prefHeight="30.0" prefWidth="30.0" styleClass="logout-button" />
+                        <HBox alignment="CENTER_LEFT" prefHeight="65.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Button fx:id="menu" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="hamburger-button" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="65.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label fx:id="dateLabel" text="Date" textFill="WHITE">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="65.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutAction" prefHeight="30.0" prefWidth="30.0" styleClass="logout-button" />
+                           </children>
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </HBox>
                      </children>
-                     <padding>
-                        <Insets right="10.0" />
-                     </padding>
                   </HBox>
                </children>
             </HBox>
          </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </HBox>
+      </VBox>
       <StackPane alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefWidth="760.0" VBox.vgrow="ALWAYS">
          <children>
             <VBox fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="760.0" styleClass="vbox-panel" StackPane.alignment="TOP_LEFT" />

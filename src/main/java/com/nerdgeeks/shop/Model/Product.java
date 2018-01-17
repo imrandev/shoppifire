@@ -2,17 +2,16 @@ package com.nerdgeeks.shop.Model;
 
 public class Product {
 
-    private String productId, productName, buyingPrice, sellingPrice, productVat, productCategory, productSupplier;
+    private String productId, productName, buyingPrice, sellingPrice, productCategory, productSupplier;
 
     public Product() {
     }
 
-    public Product(String productId, String productName, String buyingPrice, String sellingPrice, String productVat, String productCategory, String productSupplier) {
+    public Product(String productId, String productName, String buyingPrice, String sellingPrice, String productCategory, String productSupplier) {
         this.productId = productId;
         this.productName = productName;
         this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
-        this.productVat = productVat;
         this.productCategory = productCategory;
         this.productSupplier = productSupplier;
     }
@@ -47,14 +46,6 @@ public class Product {
 
     public void setSellingPrice(String sellingPrice) {
         this.sellingPrice = sellingPrice;
-    }
-
-    public String getProductVat() {
-        return productVat;
-    }
-
-    public void setProductVat(String productVat) {
-        this.productVat = productVat;
     }
 
     public String getProductCategory() {

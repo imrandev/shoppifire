@@ -77,3 +77,17 @@
     -fx-font-size: 18;
     -fx-prompt-text-fill: #ffffff;
 }
+
+@font-face {
+    font-family: 'HelveticaNeue';
+    src: url('fonts/HelveticaNeue.ttf');
+}
+
+.label {
+    -fx-font-family: 'HelveticaNeue';
+    -fx-font-size: 16;
+}
+
+.button .text {
+    -fx-font-family: 'HelveticaNeue';
+}

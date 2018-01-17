@@ -4,6 +4,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.jfoenix.controls.JFXButton;
+import com.nerdgeeks.shop.MainApp;
 import com.nerdgeeks.shop.Model.Product;
 import com.nerdgeeks.shop.Model.SellProductModel;
 import com.nerdgeeks.shop.Model.Stock;
@@ -11,6 +12,8 @@ import com.nerdgeeks.shop.Util.AppConstant;
 import com.nerdgeeks.shop.Util.DatabaseUtil;
 import com.nerdgeeks.shop.Util.JFXUtil;
 import com.nerdgeeks.shop.Util.OnGetDataListener;
+import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,9 +21,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -31,19 +48,26 @@ public class SellController implements Initializable {
 
     public TableView productTableView, listTableView;
     public Label quantityLabel;
-    public VBox sellPane;
     public JFXButton addButton, removeButton, paymentButton;
+    public Button logoutButton;
+    public VBox header;
+    public VBox anchorPane;
+    public TextField vatAmount;
 
     private ObservableList<Product> stockData = FXCollections.observableArrayList();
     private ObservableList<Stock> stockCount = FXCollections.observableArrayList();
-    private ObservableList<Product> filterList = FXCollections.observableArrayList();
-    public static ObservableList<SellProductModel> productModels = FXCollections.observableArrayList();
+    private ObservableList<SellProductModel> productModels = FXCollections.observableArrayList();
     private FilteredList<Product> filteredData = new FilteredList<>(stockData, s -> true);
 
     private double subTotal;
-    private String vat;
     private double tempVat;
     private double netPayable;
+    private double xOffset = 0;
+    private double yOffset = 0;
+
+    private ObservableList<Integer> vatItems = FXCollections.observableArrayList();
+    private double total;
+    private double v;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -54,22 +78,24 @@ public class SellController implements Initializable {
         productTableView.setRowFactory(tv -> {
             TableRow<ObservableList> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                Product product = (Product) productTableView.getSelectionModel().getSelectedItem();
-                productField.setText(product.getProductName());
-                priceField.setText(product.getSellingPrice());
-                onButtonSetUpDisable(false);
-                if (filterList.size() == 0) {
-                    quantityLabel.setText("Stock: " + stockCount
-                            .get(productTableView.getSelectionModel().getSelectedIndex()).getInStock());
-                    vat = stockData.get(productTableView.getSelectionModel().getSelectedIndex()).getProductVat();
-                } else {
-                    for (Stock s : stockCount) {
-                        if (s.getProductId().equals(
-                                filterList.get(productTableView.getSelectionModel().getSelectedIndex()).getProductId())) {
-                            quantityLabel.setText("Stock: " + s.getInStock());
-                            vat = filterList.get(productTableView.getSelectionModel().getSelectedIndex()).getProductVat();
+                try{
+                    Product product = (Product) productTableView.getSelectionModel().getSelectedItem();
+                    int index = productTableView.getSelectionModel().getSelectedIndex();
+
+                    if (index >-1 && product != null){
+                        productField.setText(product.getProductName());
+                        priceField.setText(product.getSellingPrice());
+                        onButtonSetUpDisable(false);
+
+                        for (Stock s : stockCount) {
+                            if (s.getProductId().compareTo(
+                                    product.getProductId())==0) {
+                                quantityLabel.setText("Stock: " + s.getInStock());
+                            }
                         }
                     }
+                } catch (Exception ex){
+                    ex.printStackTrace();
                 }
             });
             return row;
@@ -81,7 +107,7 @@ public class SellController implements Initializable {
         JFXUtil.setTableData(listTableView, SellColName, productModels);
 
         removeButton.disableProperty().bind(Bindings.isEmpty(listTableView.getSelectionModel().getSelectedItems()));
-        sellPane.setOnMouseClicked(event -> {
+        anchorPane.setOnMouseClicked(event -> {
             listTableView.getSelectionModel().clearSelection();
             productTableView.getSelectionModel().clearSelection();
         });
@@ -92,10 +118,57 @@ public class SellController implements Initializable {
                 if(newValue == null || newValue.length() == 0) {
                     netPayableField.setText("" + netPayable);
                 } else {
-                    double total = netPayable - Double.parseDouble(newValue);
+                    total = netPayable - Double.parseDouble(newValue);
                     netPayableField.setText("" + total);
-                    System.out.print(newValue);
                 }
+            }
+        });
+
+        header.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                resetAction();
+                if (event.getButton().equals(MouseButton.PRIMARY)){
+                    if (event.getClickCount()==2){
+                        Stage currentStage = (Stage) anchorPane.getScene().getWindow();
+                        if (currentStage.isFullScreen()){
+                            currentStage.setFullScreen(false);
+                        } else {
+                            currentStage.setFullScreenExitHint("");
+                            currentStage.setFullScreen(true);
+                        }
+                    }
+                }
+            }
+        });
+
+        subTotalField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                double value = Double.valueOf(newValue);
+                if (!vatField.getText().isEmpty()){
+                    double v = ( value * Double.parseDouble(vatField.getText())) / 100;
+                    netPayable = value + v;
+                    vatAmount.setText("" + v);
+                    netPayableField.setText("" + netPayable);
+                } else {
+                    netPayableField.setText("" + value);
+                }
+            }
+        });
+
+        vatField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.equals("")){
+                    v = (subTotal * Double.parseDouble(newValue)) / 100;
+                    netPayable += v;
+                    vatAmount.setText("" + v);
+                } else {
+                    netPayable = subTotal;
+                    vatAmount.setText("0.0");
+                }
+                netPayableField.setText("" + netPayable);
             }
         });
     }
@@ -158,8 +231,8 @@ public class SellController implements Initializable {
                         }
                     }
                 }
+                clearAction();
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -171,11 +244,28 @@ public class SellController implements Initializable {
         JFXUtil.setTableData(productTableView, ProductTableColName, stockData);
     }
 
-    public void logoutAction(ActionEvent actionEvent) {
+    public void logoutAction(ActionEvent actionEvent) throws IOException {
+        Parent root;
+        URL myFxmlURL = ClassLoader.getSystemResource("layout/MainApp.fxml");
+        root = FXMLLoader.load(myFxmlURL);
+        Scene newScene = new Scene(root);
+
+        Stage currentStage = (Stage) anchorPane.getScene().getWindow();
+        currentStage.setScene(newScene);
+
+        root.setOnMousePressed((MouseEvent event) -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+        root.setOnMouseDragged((MouseEvent event) -> {
+            currentStage.setX(event.getScreenX() - xOffset);
+            currentStage.setY(event.getScreenY() - yOffset);
+        });
     }
 
     public void addAction(ActionEvent actionEvent) {
         String product = productField.getText();
+
         Product product1 = (Product) productTableView.getSelectionModel().getSelectedItem();
         String id = product1.getProductId();
         String qt = quantityField.getText();
@@ -185,35 +275,32 @@ public class SellController implements Initializable {
         double unitPrice = Double.parseDouble(priceField.getText());
         int quantity = Integer.parseInt(qt);
 
-        double total = quantity * unitPrice;
+        total = quantity * unitPrice;
         SellProductModel model = new SellProductModel(id, product, unitPrice, quantity, total);
         productModels.add(model);
 
         subTotal += total;
         subTotalField.setText("" + subTotal);
 
-        double v = (total * Double.parseDouble(vat)) / 100;
-        tempVat += v;
-        vatField.setText("" + tempVat);
         paymentButton.setDisable(false);
-
-        netPayable = subTotal + tempVat;
-        netPayableField.setText("" + netPayable);
-        resetAction(actionEvent);
+        discountField.setDisable(false);
+        resetAction();
     }
 
     public void removeAction(ActionEvent actionEvent) {
         int index = listTableView.getSelectionModel().getSelectedIndex();
         subTotal -= productModels.get(index).getTotal();
+        netPayable = subTotal;
         productModels.remove(index);
         subTotalField.setText("" + subTotal);
 
         if (listTableView.getItems().isEmpty()) {
             paymentButton.setDisable(true);
+            discountField.setDisable(true);
         }
     }
 
-    public void resetAction(ActionEvent actionEvent) {
+    public void resetAction() {
         productField.setText("");
         priceField.setText("");
         productTableView.getSelectionModel().clearSelection();
@@ -223,17 +310,34 @@ public class SellController implements Initializable {
     }
 
     public void paymentAction(ActionEvent actionEvent) {
-        CheckoutController.totalAmount = netPayable;
+        if (!discountField.getText().isEmpty()){
+            CheckoutController.totalAmount = total;
+        } else {
+            CheckoutController.totalAmount = netPayable;
+        }
         CheckoutController.Products = productModels;
         JFXUtil.popUpWindows("layout/sell/Checkout.fxml");
     }
 
-    public void clearAction(ActionEvent actionEvent) {
+    public void clearAction() {
         listTableView.getItems().clear();
         subTotal = 0;
         tempVat = 0;
-        subTotalField.setText("");
+        netPayable = 0;
+        subTotalField.setText("0.0");
         vatField.setText("");
+        netPayableField.setText("0.0");
+        discountField.setText("");
+        discountField.setDisable(true);
         paymentButton.setDisable(true);
+    }
+
+    public void minusAction(ActionEvent actionEvent) {
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+    public void closeAction(ActionEvent actionEvent) {
+        Platform.exit();
     }
 }

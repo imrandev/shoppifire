@@ -43,12 +43,10 @@
           <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <JFXTextField fx:id="buyingPriceField" labelFloat="true" prefColumnCount="15" promptText="Buying Price (Per Item)" GridPane.columnSpan="2" GridPane.rowIndex="3" />
             <JFXTextField fx:id="sellingPriceField" labelFloat="true" prefColumnCount="15" promptText="Selling Price (Per Item)" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-            <JFXTextField fx:id="productVatField" labelFloat="true" promptText="Vat %" GridPane.columnSpan="2" GridPane.rowIndex="5" />
             <JFXComboBox fx:id="productCategoryField" editable="true" labelFloat="true" promptText="Category" visibleRowCount="15" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
             <JFXComboBox fx:id="productSupplierField" labelFloat="true" promptText="Supplier" styleClass="combo-box" visibleRowCount="15" GridPane.halignment="LEFT" />
             <JFXTextField fx:id="productNameField" labelFloat="true" prefColumnCount="15" promptText="Product Name" GridPane.columnSpan="2" GridPane.rowIndex="1" />

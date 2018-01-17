@@ -26,7 +26,6 @@ public class UpdateProductController implements Initializable{
     public JFXTextField productIdField;
     public JFXTextField buyingPriceField;
     public JFXTextField sellingPriceField;
-    public JFXTextField productVatField;
     public JFXComboBox productCategoryField;
 
     static ObservableList<String> category = FXCollections.observableArrayList();
@@ -44,7 +43,6 @@ public class UpdateProductController implements Initializable{
         productIdField.setText(updateProduct.getProductId());
         buyingPriceField.setText(updateProduct.getBuyingPrice());
         sellingPriceField.setText(updateProduct.getSellingPrice());
-        productVatField.setText(updateProduct.getProductVat());
     }
 
     @FXML
@@ -56,12 +54,10 @@ public class UpdateProductController implements Initializable{
             String product_Id = productIdField.getText();
             String buying_Price = buyingPriceField.getText();
             String selling_Price = sellingPriceField.getText();
-            String product_Vat = productVatField.getText();
             String product_Category = productCategoryField.getSelectionModel().getSelectedItem().toString();
             String product_Supplier = updateProduct.getProductSupplier();
 
-            Product product = new Product(product_Id,product_Name, buying_Price,selling_Price,
-                    product_Vat,product_Category,product_Supplier);
+            Product product = new Product(product_Id,product_Name, buying_Price,selling_Price,product_Category,product_Supplier);
 
             DatabaseUtil.firebaseDatabase.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME)
                     .child(product_Supplier)
@@ -85,7 +81,6 @@ public class UpdateProductController implements Initializable{
         productIdField.clear();
         buyingPriceField.clear();
         sellingPriceField.clear();
-        productVatField.clear();
         productCategoryField.getSelectionModel().clearSelection();
     }
 
@@ -104,9 +99,6 @@ public class UpdateProductController implements Initializable{
         }
         if (sellingPriceField.getText().isEmpty()) {
             errorMessage += "Selling Price Required!!\n";
-        }
-        if (productVatField.getText().isEmpty()) {
-            errorMessage += "Vat Required!!\n";
         }
         if (productCategoryField.getSelectionModel().isEmpty()) {
             errorMessage += "Category Required!!\n";

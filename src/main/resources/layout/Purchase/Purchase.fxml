@@ -41,7 +41,7 @@
             <Insets left="10.0" right="10.0" />
          </padding>
          </HBox>
-         <TableView fx:id="purchaseProductTable" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS" styleClass="table">
+         <TableView fx:id="purchaseProductTable" styleClass="table" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
             <VBox.margin>
                <Insets left="10.0" right="10.0" />
             </VBox.margin>

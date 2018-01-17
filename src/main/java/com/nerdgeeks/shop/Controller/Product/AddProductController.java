@@ -28,7 +28,6 @@ public class AddProductController implements Initializable{
     public JFXTextField productIdField;
     public JFXTextField buyingPriceField;
     public JFXTextField sellingPriceField;
-    public JFXTextField productVatField;
     public JFXComboBox productCategoryField;
     public JFXComboBox productSupplierField;
 
@@ -72,13 +71,12 @@ public class AddProductController implements Initializable{
             String product_Name = productNameField.getText();
             String buying_Price = buyingPriceField.getText();
             String selling_Price = sellingPriceField.getText();
-            String product_Vat = productVatField.getText();
             String product_Category = productCategoryField.getSelectionModel().getSelectedItem().toString();
             String product_Supplier = productSupplierField.getSelectionModel().getSelectedItem().toString();
             String productId = productIdField.getText();
 
             Product product = new Product(productId,product_Name,
-                    buying_Price,selling_Price,product_Vat,product_Category,product_Supplier);
+                    buying_Price,selling_Price,product_Category,product_Supplier);
 
             DatabaseUtil.firebaseDatabase.child(AppConstant.PRODUCTS_DATABASE_NODE_NAME)
                     .child(product_Supplier)
@@ -101,7 +99,6 @@ public class AddProductController implements Initializable{
         productNameField.setText("");
         buyingPriceField.setText("");
         sellingPriceField.setText("");
-        productVatField.setText("");
         productCategoryField.getSelectionModel().select(null);
         productSupplierField.getSelectionModel().clearSelection();
     }
@@ -121,9 +118,6 @@ public class AddProductController implements Initializable{
         }
         if (sellingPriceField.getText().isEmpty()) {
             errorMessage += "Selling Price Required!!\n";
-        }
-        if (productVatField.getText().isEmpty()) {
-            errorMessage += "Vat Required!!\n";
         }
         if (productCategoryField.getSelectionModel().isEmpty()) {
             errorMessage += "Category Required!!\n";

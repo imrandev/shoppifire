@@ -7,7 +7,9 @@ import com.nerdgeeks.shop.MainApp;
 import com.nerdgeeks.shop.Util.JFXUtil;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -31,6 +34,7 @@ public class AdminController implements Initializable {
     public Button dashboardButton, supplierButton, stockButton,
             productButton, purchaseButton, salesButton, staffButton, reportButton;
     public Label dateLabel;
+    public VBox vBox;
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -52,6 +56,20 @@ public class AdminController implements Initializable {
                 openNav();
             } else {
                 closeNav();
+            }
+        });
+
+        vBox.setOnMouseClicked(event -> {
+            if (event.getButton().equals(MouseButton.PRIMARY)) {
+                if (event.getClickCount() == 2) {
+                    Stage vStage = (Stage) vBox.getScene().getWindow();
+                    if (!vStage.isFullScreen()) {
+                        vStage.setFullScreenExitHint("");
+                        vStage.setFullScreen(true);
+                    } else {
+                        vStage.setFullScreen(false);
+                    }
+                }
             }
         });
     }
@@ -196,5 +214,14 @@ public class AdminController implements Initializable {
     private void setDataPane(Node node) {
         // update VBox with new form(FXML) depends on which button is clicked
         mainPane.getChildren().setAll(node);
+    }
+
+    public void minusAction(ActionEvent actionEvent) {
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+    public void closeAction(ActionEvent actionEvent) {
+        Platform.exit();
     }
 }

@@ -163,5 +163,42 @@ MenuButton{
 
 .table {
     -fx-font-size: 17;
-    -fx-font-family: "Arkhip_font";
+    -fx-font-family: "HelveticaNeue";
+}
+
+@font-face {
+    font-family: 'HelveticaNeue';
+    src: url('fonts/HelveticaNeue.ttf');
+}
+
+.label {
+    -fx-font-family: 'HelveticaNeue';
+    -fx-font-size: 16;
+}
+
+.button .text {
+    -fx-font-family: 'HelveticaNeue';
+}
+
+.minus-button {
+    -fx-background-image: url("../images/minus.png");
+}
+
+.close-button {
+    -fx-background-image: url("../images/close.png");
+}
+
+.minus-button, .close-button {
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 75%;
+    -fx-background-position: center center;
+    -fx-background-color: transparent;
+}
+
+.close-button:hover {
+    -fx-background-color: rgba(255, 255, 247, .3);
+}
+
+.minus-button:hover {
+    -fx-background-color: rgba(255, 255, 247, .3);
 }

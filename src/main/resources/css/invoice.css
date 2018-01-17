@@ -23,3 +23,17 @@
 
     -fx-font-size: 20;
 }
+
+@font-face {
+    font-family: 'HelveticaNeue';
+    src: url('fonts/HelveticaNeue.ttf');
+}
+
+.label {
+    -fx-font-family: 'HelveticaNeue';
+    -fx-font-size: 16;
+}
+
+.button .text {
+    -fx-font-family: 'HelveticaNeue';
+}

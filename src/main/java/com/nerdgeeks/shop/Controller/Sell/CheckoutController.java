@@ -52,12 +52,14 @@ public class CheckoutController implements Initializable {
                             if(paid > totalAmount){
                                 double returnValue = paid - totalAmount;
                                 returnAmount.setText("" + returnValue);
+                            } else {
+                                returnAmount.setText("0");
                             }
                         }
                     });
                 }
                 else {
-                    returnAmount.setText("0");
+                    returnAmount.setText("");
                 }
             }
         });
@@ -83,7 +85,7 @@ public class CheckoutController implements Initializable {
                     for (SellProductModel sell : Products){
                         updateStockItem(sell.getId(), sell.getQuantity());
                     }
-                    SellController.productModels.clear();
+
                 });
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

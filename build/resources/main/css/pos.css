@@ -1,0 +1,133 @@
+
+.header{
+    -fx-background-color: #17A9A8;
+}
+
+.header-label{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 40px;
+}
+
+.product-vbox{
+    -fx-background-color: #EEEEEE;
+}
+
+.search-field {
+    -fx-text-fill: #000000;
+    -fx-background-image: url('../images/ic_search.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: right center;
+    -fx-font-size: 17;
+    -fx-background-size: 12%;
+}
+
+.menu-vbox{
+    -fx-background-color: #EEEEEE;
+}
+
+.selection-hbox{
+    -fx-background-color: #ff99ff;
+}
+
+.table {
+    -fx-font-size: 17;
+}
+
+.left-product-vbox{
+    -fx-background-color: #333244;
+}
+
+.left-grid {
+    -fx-font-size: 18;
+}
+
+.left-hbox-buttons {
+    -fx-font-size: 15px;
+}
+
+.right-product-vbox{
+    -fx-background-color: #434A54;
+}
+
+.right-grid {
+    -fx-font-size: 18;
+}
+
+.right-hbox-buttons {
+    -fx-font-size: 15px;
+}
+
+.logout-button {
+    -fx-background-image: url("../images/ic_logout.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 80%;
+    -fx-background-position: center;
+    -fx-background-color: transparent;
+}
+
+.logout-button:hover {
+    -fx-background-color: rgba(255, 255, 247, .2);
+}
+
+.menu-buttons-selected {
+
+    -fx-text-fill: white;
+    -fx-background-color: #85848F;
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 0 5px;
+    -fx-border-color: transparent transparent transparent rgba(29, 114, 107, 1);
+}
+
+.payment-buttons-selected {
+
+    -fx-text-fill: white;
+    -fx-background-color: #333244;
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 0 5px;
+    -fx-border-color: transparent transparent transparent rgba(29, 114, 107, 1);
+}
+
+@font-face {
+    font-family: 'HelveticaNeue';
+    src: url('fonts/HelveticaNeue.ttf');
+}
+
+.label {
+    -fx-font-family: 'HelveticaNeue';
+    -fx-font-size: 16;
+}
+
+.button .text {
+    -fx-font-family: 'HelveticaNeue';
+}
+
+.max-button {
+    -fx-background-image: url("../images/maximize_window.png");
+}
+
+.minus-button {
+    -fx-background-image: url("../images/minus.png");
+}
+
+.close-button {
+    -fx-background-image: url("../images/cancel_window.png");
+}
+
+.minus-button, .close-button, .max-button {
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 75%;
+    -fx-background-position: center center;
+    -fx-background-color: transparent;
+}
+
+.close-button:hover {
+    -fx-background-color: rgba(255, 255, 247, .3);
+}
+
+.minus-button:hover {
+    -fx-background-color: rgba(255, 255, 247, .3);
+}
+
+.max-button:hover {
+    -fx-background-color: rgba(255, 255, 247, .3);
+}

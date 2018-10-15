@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -37,7 +38,8 @@ public class MainAppController implements Initializable{
     public JFXTextField usernameField;
     public JFXPasswordField passwordField;
     public JFXButton loginButton;
-    public HBox rootBox;
+    public VBox rootBox;
+    public Button maxButton;
     private String email,pwd;
     static String loggedInUserId;
     private double xOffset = 0;
@@ -45,7 +47,7 @@ public class MainAppController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        onMouseMaximizeWindow();
     }
 
     public void loginAction(ActionEvent actionEvent) throws ExecutionException, InterruptedException {
@@ -126,8 +128,13 @@ public class MainAppController implements Initializable{
             Scene newScene = new Scene(secondView);
 
             Stage currentStage = (Stage) rootBox.getScene().getWindow();
-            currentStage.setScene(newScene);
-            //currentStage.setFullScreen(true);
+
+            if (currentStage.isFullScreen()){
+                currentStage.setScene(newScene);
+                currentStage.setFullScreen(true);
+            } else {
+                currentStage.setScene(newScene);
+            }
 
             secondView.setOnMousePressed((MouseEvent event) -> {
                 xOffset = event.getSceneX();
@@ -190,5 +197,42 @@ public class MainAppController implements Initializable{
     private void resetFields() {
         usernameField.setText("");
         passwordField.setText("");
+    }
+
+    private void onChangedMaxWindowIcon() {
+        Stage currentStage = (Stage) rootBox.getScene().getWindow();
+        if (currentStage.isFullScreen()){
+            String image = MainAppController.class.getResource("/images/maximize_window.png").toExternalForm();
+            maxButton.setStyle("-fx-background-image: url('" + image + "'); " +
+                    "-fx-background-position: center center; " +
+                    "-fx-background-repeat: stretch;");
+            currentStage.setFullScreen(false);
+        } else {
+            String image = MainAppController.class.getResource("/images/normal_window.png").toExternalForm();
+            maxButton.setStyle("-fx-background-image: url('" + image + "'); " +
+                    "-fx-background-position: center center; " +
+                    "-fx-background-repeat: stretch;");
+            currentStage.setFullScreenExitHint("");
+            currentStage.setFullScreen(true);
+        }
+    }
+
+    private void onMouseMaximizeWindow() {
+        rootBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getButton().equals(MouseButton.PRIMARY)){
+                    if (event.getClickCount()==2){
+                        onChangedMaxWindowIcon();
+                    }
+                }
+            }
+        });
+    }
+
+    public void maxAction(ActionEvent actionEvent) {
+        if (actionEvent.getEventType() == ActionEvent.ACTION){
+            onChangedMaxWindowIcon();
+        }
     }
 }

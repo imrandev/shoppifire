@@ -4,13 +4,16 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.io.File;
-import java.io.FileOutputStream;
+import javafx.print.PrinterJob;
+
+import javax.print.*;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import java.io.*;
 import java.util.Date;
 
 public class CreatePDF {
 
-    private static String FILE = "c:/temp/FirstPdf.pdf";
+    private static String FILE = "E:/FirstPdf.pdf";
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
     private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
@@ -182,5 +185,17 @@ public class CreatePDF {
         }
     }
 
-
+    public static void printPDF() throws IOException {
+        PrinterJob printerJob = PrinterJob.createPrinterJob();
+        PrintService printService = PrintServiceLookup.lookupDefaultPrintService();
+        FileInputStream fis = new FileInputStream(FILE);
+        Doc pdfDoc = new SimpleDoc(fis, null, null);
+        DocPrintJob printJob = printService.createPrintJob();
+        try {
+            printJob.print(pdfDoc, new HashPrintRequestAttributeSet());
+        } catch (PrintException e) {
+            e.printStackTrace();
+        }
+        fis.close();
+    }
 }

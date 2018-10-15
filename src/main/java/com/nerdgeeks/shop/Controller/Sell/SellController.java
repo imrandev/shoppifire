@@ -8,6 +8,7 @@ import com.nerdgeeks.shop.MainApp;
 import com.nerdgeeks.shop.Model.Product;
 import com.nerdgeeks.shop.Model.SellProductModel;
 import com.nerdgeeks.shop.Model.Stock;
+import com.nerdgeeks.shop.PDF.CreatePDF;
 import com.nerdgeeks.shop.Util.AppConstant;
 import com.nerdgeeks.shop.Util.DatabaseUtil;
 import com.nerdgeeks.shop.Util.JFXUtil;
@@ -30,10 +31,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -54,10 +55,11 @@ public class SellController implements Initializable {
     public VBox header;
     public VBox anchorPane;
     public TextField vatAmount;
+    public Button maxButton;
 
     private ObservableList<Product> stockData = FXCollections.observableArrayList();
     private ObservableList<Stock> stockCount = FXCollections.observableArrayList();
-    public static ObservableList<SellProductModel> productModels = FXCollections.observableArrayList();
+    static ObservableList<SellProductModel> productModels = FXCollections.observableArrayList();
     private FilteredList<Product> filteredData = new FilteredList<>(stockData, s -> true);
 
     private double subTotal;
@@ -121,23 +123,7 @@ public class SellController implements Initializable {
             }
         });
 
-        header.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                resetAction();
-                if (event.getButton().equals(MouseButton.PRIMARY)){
-                    if (event.getClickCount()==2){
-                        Stage currentStage = (Stage) anchorPane.getScene().getWindow();
-                        if (currentStage.isFullScreen()){
-                            currentStage.setFullScreen(false);
-                        } else {
-                            currentStage.setFullScreenExitHint("");
-                            currentStage.setFullScreen(true);
-                        }
-                    }
-                }
-            }
-        });
+        onMouseMaximizeWindow();
 
         subTotalField.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -170,6 +156,38 @@ public class SellController implements Initializable {
                 netPayableField.setText("" + netPayable);
             }
         });
+    }
+
+    private void onMouseMaximizeWindow() {
+        header.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                resetAction();
+                if (event.getButton().equals(MouseButton.PRIMARY)){
+                    if (event.getClickCount()==2){
+                        onChangedMaxWindowIcon();
+                    }
+                }
+            }
+        });
+    }
+
+    private void onChangedMaxWindowIcon() {
+        Stage currentStage = (Stage) anchorPane.getScene().getWindow();
+        if (currentStage.isFullScreen()){
+            String image = SellController.class.getResource("/images/maximize_window.png").toExternalForm();
+            maxButton.setStyle("-fx-background-image: url('" + image + "'); " +
+                    "-fx-background-position: center center; " +
+                    "-fx-background-repeat: stretch;");
+            currentStage.setFullScreen(false);
+        } else {
+            String image = SellController.class.getResource("/images/normal_window.png").toExternalForm();
+            maxButton.setStyle("-fx-background-image: url('" + image + "'); " +
+                    "-fx-background-position: center center; " +
+                    "-fx-background-repeat: stretch;");
+            currentStage.setFullScreenExitHint("");
+            currentStage.setFullScreen(true);
+        }
     }
 
     private void onButtonSetUpDisable(boolean isDisable) {
@@ -250,8 +268,16 @@ public class SellController implements Initializable {
         Scene newScene = new Scene(root);
 
         Stage currentStage = (Stage) anchorPane.getScene().getWindow();
-        currentStage.setScene(newScene);
 
+        if (currentStage.isFullScreen()){
+            currentStage.setScene(newScene);
+            currentStage.setFullScreen(true);
+        } else {
+            currentStage.setScene(newScene);
+        }
+
+        currentStage.setResizable(true);
+        currentStage.show();
         root.setOnMousePressed((MouseEvent event) -> {
             xOffset = event.getSceneX();
             yOffset = event.getSceneY();
@@ -341,5 +367,11 @@ public class SellController implements Initializable {
 
     public void closeAction(ActionEvent actionEvent) {
         Platform.exit();
+    }
+
+    public void maxAction(ActionEvent actionEvent) {
+        if (actionEvent.getEventType() == ActionEvent.ACTION){
+            onChangedMaxWindowIcon();
+        }
     }
 }

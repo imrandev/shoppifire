@@ -1,0 +1,21 @@
+.combo-box {
+    -fx-background-color: #ffffff00;
+}
+
+.list-cell:selected{
+    -fx-text-fill: black;
+}
+
+@font-face {
+    font-family: 'HelveticaNeue';
+    src: url('fonts/HelveticaNeue.ttf');
+}
+
+.label {
+    -fx-font-family: 'HelveticaNeue';
+    -fx-font-size: 16;
+}
+
+.button .text {
+    -fx-font-family: 'HelveticaNeue';
+}

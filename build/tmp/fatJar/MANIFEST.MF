@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Implementation-Title: Super Shop
+Implementation-Version: 1.0
+Main-Class: com.nerdgeeks.shop.MainApp
+Import-Package: com.nerdgeeks.shop
+
